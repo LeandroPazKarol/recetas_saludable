@@ -9,13 +9,13 @@
 
 /*tamaño del tab*/
 .tab-content {
-  height: 550px;
+  height: 600px;
   overflow-y: auto;
 }
 
 /*color tab normal*/
 .nav-tabs .nav-link {
-  color: #198754;
+  color: #fc4eff;
 }
 
 /*color tab activo*/
