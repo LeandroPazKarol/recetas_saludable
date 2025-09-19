@@ -1,0 +1,42 @@
+/*Estilo contenedor del perfil*/
+.contenedor-perfil {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 425px;
+  height: 592px;
+}
+
+/*tamaño del tab*/
+.tab-content {
+  height: 550px;
+  overflow-y: auto;
+}
+
+/*color tab normal*/
+.nav-tabs .nav-link {
+  color: #198754;
+}
+
+/*color tab activo*/
+.nav-tabs .nav-link.active {
+  color: #198754;
+  font-weight: bold;
+  border-color: #198754 #198754 #fff;
+}
+
+/*Color de los tabs al pasar el cursor*/
+.nav-tabs .nav-link:hover {
+  color: #145c32;
+}
+
+/*
+idea quizas se use despues xd
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}*/
