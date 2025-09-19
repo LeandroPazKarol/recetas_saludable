@@ -1,5 +1,5 @@
 # 🍲 Plataforma de Recetas Saludables y Económicas  
-![logo](./assets/markdown/logo.pngs)
+![logo](https://raw.githubusercontent.com/LeandroPazKarol/recetas_saludable/refs/heads/develop/assets/logo.png)
 ## 📖 Descripción  
 Este proyecto consiste en el desarrollo de una *plataforma web de recetas saludables y económicas, orientada a estudiantes y familias que buscan opciones de alimentación accesibles, rápidas y nutritivas. La propuesta incluye la posibilidad de **buscar recetas según los ingredientes disponibles en casa*, además de clasificarlas por tiempo de preparación y presupuesto.  
 
@@ -75,8 +75,8 @@ recetas_saludable/
 
 ## Mockups
 inicio
-![inicio](./assets/markdown/inicio.jpg)
+![inicio](https://raw.githubusercontent.com/LeandroPazKarol/recetas_saludable/refs/heads/develop/assets/markdown/inicio.jpg)
 login
-![inicio](./assets/markdown/login.jpg)
+![inicio](https://raw.githubusercontent.com/LeandroPazKarol/recetas_saludable/refs/heads/develop/assets/markdown/login.jpg)
 registro
-![inicio](./assets/markdown/registro.jpg)
+![inicio](https://raw.githubusercontent.com/LeandroPazKarol/recetas_saludable/refs/heads/develop/assets/markdown/registro.jpg)
