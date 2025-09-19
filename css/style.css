@@ -2,7 +2,7 @@
 .contenedor-perfil {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
   width: 425px;
   height: 592px;
 }
