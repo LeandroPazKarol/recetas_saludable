@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recetas </title>
+    <title>Ideas</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="../static/css/style.css" />
 </head>
 
 <body>
@@ -17,7 +17,7 @@
         <div class="container d-flex flex-wrap justify-content-between align-items-center">
             <!-- Logo  -->
             <div class="d-flex align-items-center">
-                <a href="index.html">
+                <a th:href="@{/}" href="index.html">
                     <img src="../assets/logo.png" alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
                 </a>
                 <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
@@ -27,19 +27,22 @@
             <nav>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link text-white">Inicio</a>
+                        <a th:href="@{/}" href="index.html" class="nav-link text-white">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a href="recetas.html" class="nav-link text-white">Recetas</a>
+                        <a th:href="@{/recetas}" href="recetas.html" class="nav-link text-white">Recetas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="buscar.html" class="nav-link text-white">Buscar por Ingredientes</a>
+                        <a th:href="@{/buscar}" href="buscar.html" class="nav-link text-white">Buscar</a>
                     </li>
                     <li class="nav-item">
-                        <a href="ideas.html" class="nav-link text-white">Ideas</a>
+                        <a th:href="@{/ideas}" href="ideas.html" class="nav-link text-white">Ideas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="perfil.html"><img src="../assets/usuario1.png" width="50" height="50" alt="usuario1"></a>
+                        <a th:href="@{/usuario/perfil}" href="perfil.html" class="nav-link text-white">
+                            <span id="Perfil-nombre">Perfil</span>
+                            <i class="bi bi-person-circle"></i>
+                        </a>
                     </li>
                 </ul>
             </nav>

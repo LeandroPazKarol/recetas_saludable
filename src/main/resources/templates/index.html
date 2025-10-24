@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
@@ -9,7 +9,7 @@
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" th:href="@{./css/style.css}"/>
 </head>
 
 <body>
@@ -19,7 +19,7 @@
             <!-- Logo  -->
             <div class="d-flex align-items-center">
                 <a href="index.html">
-                    <img src="../assets/logo.png" alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
+                    <img src="../assets/logo.png"  alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
                 </a>
                 <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
             </div>
@@ -28,19 +28,22 @@
             <nav>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link text-white">Inicio</a>
+                        <a th:href="@{/}" href="index.html" class="nav-link text-white">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a href="recetas.html" class="nav-link text-white">Recetas</a>
+                        <a th:href="@{/recetas}" href="recetas.html" class="nav-link text-white">Recetas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="buscar.html" class="nav-link text-white">Buscar por Ingredientes</a>
+                        <a th:href="@{/buscar}" href="buscar.html" class="nav-link text-white">Buscar</a>
                     </li>
                     <li class="nav-item">
-                        <a href="ideas.html" class="nav-link text-white">Ideas</a>
+                        <a th:href="@{/ideas}" href="ideas.html" class="nav-link text-white">Ideas</a>
                     </li>
                     <li class="nav-item">
-                        <a href="perfil.html"><img src="../assets/usuario1.png" width="50" height="50" alt="usuario1"></a>
+                        <a th:href="@{/usuario/perfil}" href="perfil.html" class="nav-link text-white">
+                            <span id="Perfil-nombre">Perfil</span>
+                            <i class="bi bi-person-circle"></i>
+                        </a>
                     </li>
                 </ul>
             </nav>
@@ -54,7 +57,7 @@
             <!-- Título y descripción -->
             <h2>
                 Bienvenido a
-                <span class="text-success fw-bold">Recetas al Alcance desde la rama feature-html</span>
+                <span class="text-success fw-bold">Recetas al Alcance</span>
             </h2>
             <p class="lead">
                 Encuentra recetas fáciles, saludables y económicas, organizadas por
@@ -72,13 +75,13 @@
             <div id="carouselBienvenida" class="carousel slide mt-5" data-bs-ride="carousel">
                 <div class="carousel-inner rounded shadow">
                     <div class="carousel-item active">
-                        <img src="../assets/plato1.jpg" class="d-block w-100" alt="plato1" />
+                        <img src="../assets/plato1.jpg" th:src="@{/assets/plato1.jpg}" class="d-block w-100" alt="plato1" />
                     </div>
                     <div class="carousel-item">
-                        <img src="../assets/plato2.jpg" class="d-block w-100" alt="plato2" />
+                        <img src="../assets/plato2.jpg" th:src="@{/assets/plato2.jpg}" class="d-block w-100" alt="plato2" />
                     </div>
                     <div class="carousel-item">
-                        <img src="../assets/plata3.webp" class="d-block w-100" alt="plato3" />
+                        <img src="../assets/plata3.webp" th:src="@{/assets/plata3.webp}" class="d-block w-100" alt="plato3" />
                     </div>
                 </div>
                 <!-- Controles del carrusel -->
@@ -123,7 +126,7 @@
         <section>
             <h2 class="mb-4 text-center">Receta destacada</h2>
             <div class="card mx-auto" style="max-width: 500px">
-                <img src="../assets/plato4.jpg" class="card-img-top" alt="Ejemplo de receta" />
+                <img src="../assets/plato4.jpg" th:src="@{/assets/plato4.jpg}" class="card-img-top" alt="Ejemplo de receta" />
                 <div class="card-body">
                     <h5 class="card-title">Ensalada fresca de quinoa</h5>
                     <p class="card-text">

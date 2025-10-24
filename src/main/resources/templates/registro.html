@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+  <link rel="stylesheet" th:href="@{./css/style.css}"/>
+  <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+
+<header class="bg-success text-white p-3">
+  <div class="container d-flex flex-wrap justify-content-between align-items-center">
+    <!-- Logo  -->
+    <div class="d-flex align-items-center">
+      <a th:href="@{/}" href="index.html">
+        <img src="../assets/logo.png" alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
+      </a>
+      <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
+    </div>
+
+    <!-- Menú de navegación -->
+    <nav>
+      <ul class="nav">
+        <li class="nav-item">
+          <a th:href="@{/}" href="index.html" class="nav-link text-white">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/recetas}" href="recetas.html" class="nav-link text-white">Recetas</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/buscar}" href="buscar.html" class="nav-link text-white">Buscar</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/ideas}" href="ideas.html" class="nav-link text-white">Ideas</a>
+        </li>
+        <li class="nav-item">
+          <a th:href="@{/usuario/perfil}" href="perfil.html" class="nav-link text-white">
+            <span id="Perfil-nombre">Perfil</span>
+            <i class="bi bi-person-circle"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+  <main class="login-contenedor">
+
+    <form th:action="@{/usuario/guardarUsuario}" th:object="${usuario}" method="post">
+
+      <h2 class="login-titulo">iniciar sesión</h2>
+
+      <label>Nombre</label>
+      <br>
+      <input th:field="*{nombre}" type="text" placeholder="Nombre" required />
+      <br>
+
+      <label>Apellido</label>
+      <br>
+      <input th:field="*{apellido}" type="text" placeholder="Apellido" required />
+      <br>
+
+      <label>Correo</label>
+      <br>
+      <input th:field="*{correo}" type="email" placeholder="correo@gmail.com" required />
+      <br>
+
+      <label>Contraseña</label>
+      <br>
+      <input th:field="*{contrasena}" type="password" placeholder="Contraseña" required />
+      <br>
+
+      <label>Telefono</label>
+      <br>
+      <input th:field="*{telefono}" type="text" placeholder="999888777" required />
+      <br>
+
+      <label>Pais</label>
+      <br>
+      <input th:field="*{pais}" type="text" placeholder="Pais" required />
+      <br>     
+
+      <button type="submit">ingresar</button>
+    </form>
+
+  </main>
+
+</body>
+
+</html>
