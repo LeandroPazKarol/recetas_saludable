@@ -2,20 +2,19 @@
 .contenedor-perfil {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
   width: 425px;
   height: 592px;
 }
 
 /*tamaño del tab*/
 .tab-content {
-  height: 600px;
+  height: 550px;
   overflow-y: auto;
 }
 
 /*color tab normal*/
 .nav-tabs .nav-link {
-  color: #fc4eff;
+  color: #198754;
 }
 
 /*color tab activo*/
