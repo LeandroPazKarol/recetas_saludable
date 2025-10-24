@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
@@ -17,7 +17,7 @@
         <div class="container d-flex flex-wrap justify-content-between align-items-center">
             <!-- Logo  -->
             <div class="d-flex align-items-center">
-                <a href="index.html">
+                <a th:href="@{/}" href="index.html">
                     <img src="../assets/logo.png" alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
                 </a>
                 <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
@@ -51,8 +51,8 @@
                 <div class="contenedor-perfil card shadow-sm p-3">
                     <img src="../assets/usuario1.png" alt="Foto de perfil" class="rounded-circle mb-3" width="120"
                         height="120">
-                    <h4 class="fw-bold">Nombre del Usuario</h4>
-                    <p class="text-muted">usuario@email.com</p>
+                    <h4 class="fw-bold" th:text="${usuario.nombre}">Nombre del Usuario</h4>
+                    <p class="text-muted" th:text="${usuario.correo}">usuario@email.com</p>
                     <p class="small">boenas</p>
                     <button class="btn btn-success btn-sm">Editar perfil</button>
                 </div>
@@ -84,9 +84,10 @@
                     <div class="tab-pane fade show active" id="info" role="tabpanel">
                         <h5>Datos personales</h5>
                         <ul class="list-unstyled">
-                            <li><strong>Nombre:</strong> Juan Pérez</li>
-                            <li><strong>Email:</strong> juanperez@example.com</li>
-                            <li><strong>Biografía:</strong> Me encanta experimentar con recetas nuevas.</li>
+                            <li><strong>Nombre:</strong> <span th:text="${usuario.nombre}">nombre</span> <span th:text="${usuario.apellido}">apellido</span></li>
+                            <li><strong>Telefono:</strong> <span th:text="${usuario.telefono}">999000999</span></li>
+                            <li><strong>Email:</strong> <span th:text="${usuario.correo}">nombre</span> </li>
+
                         </ul>
                     </div>
 
