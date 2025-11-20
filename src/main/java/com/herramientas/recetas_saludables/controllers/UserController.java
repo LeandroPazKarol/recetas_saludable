@@ -46,3 +46,4 @@ public class UserController {
         return "perfil"; // Thymeleaf template
     }
 }
+

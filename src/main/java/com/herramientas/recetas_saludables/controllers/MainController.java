@@ -8,33 +8,33 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    @GetMapping("/")
+    @GetMapping({"/", "/index", "/index.html"})
     public String home(){
         return "index";
     }
 
-    @GetMapping("/login")
+    @GetMapping({"/login", "/login.html"})
     public String login(){
         return "login";
     }
 
-    @GetMapping("/registro")
+    @GetMapping({"/registro", "/registro.html"})
     public String registro(Model model){
         model.addAttribute("usuario",new User());
         return "registro";
     }
 
-    @GetMapping("/buscar")
+    @GetMapping({"/buscar", "/buscar.html"})
     public String buscar(Model model){
         model.addAttribute("usuario",new User());
         return "buscar";
     }
-    @GetMapping("/recetas")
+    @GetMapping({"/recetas", "/recetas.html"})
     public String recetas(Model model){
         model.addAttribute("usuario",new User());
         return "recetas";
     }
-    @GetMapping("/ideas")
+    @GetMapping({"/ideas", "/ideas.html"})
     public String ideas(Model model){
         model.addAttribute("usuario",new User());
         return "ideas";
