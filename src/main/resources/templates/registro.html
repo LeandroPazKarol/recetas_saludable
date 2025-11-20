@@ -8,47 +8,48 @@
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-  <link rel="stylesheet" th:href="@{./css/style.css}"/>
-  <link rel="stylesheet" href="../css/login.css">
+  <link rel="stylesheet" th:href="@{./css/style.css}" />
+  <link rel="stylesheet" href="../static/css/login.css">
 </head>
 
 <body>
 
-<header class="bg-success text-white p-3">
-  <div class="container d-flex flex-wrap justify-content-between align-items-center">
-    <!-- Logo  -->
-    <div class="d-flex align-items-center">
-      <a th:href="@{/}">
-        <img th:src="@{/assets/logo.png}" src="../assets/logo.png" alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
-      </a>
-      <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
-    </div>
+  <header class="bg-success text-white p-3">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+      <!-- Logo  -->
+      <div class="d-flex align-items-center">
+        <a th:href="@{/}">
+          <img th:src="@{/assets/logo.png}" src="../static/assets/logo.png" alt="Logo Plataforma" class="me-2"
+            style="width: 50px; height: 50px" />
+        </a>
+        <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
+      </div>
 
-    <!-- Menú de navegación -->
-    <nav>
-      <ul class="nav">
-        <li class="nav-item">
-          <a th:href="@{/}" class="nav-link text-white">Inicio</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/recetas}" class="nav-link text-white">Recetas</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/buscar}" class="nav-link text-white">Buscar</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/ideas}" class="nav-link text-white">Ideas</a>
-        </li>
-        <li class="nav-item">
-          <a th:href="@{/usuario/perfil}" class="nav-link text-white">
-            <span id="Perfil-nombre">Perfil</span>
-            <i class="bi bi-person-circle"></i>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </div>
-</header>
+      <!-- Menú de navegación -->
+      <nav>
+        <ul class="nav">
+          <li class="nav-item">
+            <a th:href="@{/}" class="nav-link text-white">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/recetas}" class="nav-link text-white">Recetas</a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/buscar}" class="nav-link text-white">Buscar</a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/ideas}" class="nav-link text-white">Ideas</a>
+          </li>
+          <li class="nav-item">
+            <a th:href="@{/usuario/perfil}" class="nav-link text-white">
+              <span id="Perfil-nombre">Perfil</span>
+              <i class="bi bi-person-circle"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <main class="login-contenedor">
 
@@ -85,6 +86,9 @@
       <br>
       <input th:field="*{pais}" type="text" placeholder="Pais" required />
       <br>
+      <button type="submit">Crear cuenta</button>
+      <br>
+      <span>¿Ya tiene una cuenta? <a th:href="@{/login}">Ingresar</a></span>
 
     </form>
 
