@@ -37,23 +37,22 @@ public class SecurityConfig {
                         .requestMatchers("/",
                                 "/login",
                                 "/registro",
-                                "/ideas",
+                                "/usuario/perfil",
                                 "/buscar",
                                 "/recetas",
                                 "/usuario/guardarUsuario",
                                 "/assets/**",
                                 "/css/**",
-                                "/js/**").permitAll()
-                        .anyRequest().authenticated()
-                )
+                                "/js/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .loginProcessingUrl("/login")  // ruta del POST del formulario
-                        .usernameParameter("correo")    // ⚠️ decimos a Spring que use "email"
+                        .loginProcessingUrl("/login") // ruta del POST del formulario
+                        .usernameParameter("correo") // ⚠️ decimos a Spring que use "email"
                         .passwordParameter("contrasena") // nombre del input
                         .defaultSuccessUrl("/usuario/perfil", true)
-                        .permitAll()
-                )
+                        .permitAll())
                 .logout(logout -> logout.permitAll())
                 .authenticationProvider(authenticationProvider());
 
