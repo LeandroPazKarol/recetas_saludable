@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/login",
+                                "/registro",
                                 "/ideas",
                                 "/buscar",
                                 "/recetas",
@@ -53,6 +54,8 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/usuario/perfil", true)
                         .permitAll()
                 )
+                .logout(logout -> logout.permitAll())
+                .authenticationProvider(authenticationProvider());
 
         return http.build();
     }

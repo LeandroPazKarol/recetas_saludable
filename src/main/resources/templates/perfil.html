@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
@@ -8,88 +8,104 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="../static/css/style.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 
 <body>
-    <!-- HEADER -->
-    <header class="bg-success text-white p-3">
-        <div class="container d-flex flex-wrap justify-content-between align-items-center">
-            <!-- Logo  -->
-            <div class="d-flex align-items-center">
-                <a href="index.html">
-                    <img src="../static/assets/logo.png" alt="Logo Plataforma" class="me-2"
-                        style="width: 50px; height: 50px" />
-                </a>
-                <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
-            </div>
-
-            <!-- Menú de navegación -->
-            <nav>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a href="index.html" class="nav-link text-white">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="recetas.html" class="nav-link text-white">Recetas</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="buscar.html" class="nav-link text-white">Buscar por Ingredientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="ideas.html" class="nav-link text-white">Ideas</a>
-                    </li>
-                </ul>
-            </nav>
+<!-- HEADER -->
+<header class="bg-success text-white p-3">
+    <div class="container d-flex flex-wrap justify-content-between align-items-center">
+        <!-- Logo  -->
+        <div class="d-flex align-items-center">
+            <a th:href="@{/}">
+                <img th:src="@{/assets/logo.png}" src="../assets/logo.png" alt="Logo Plataforma" class="me-2" style="width: 50px; height: 50px" />
+            </a>
+            <h1 class="h3 mb-0 fw-bold">Recetas al Alcance</h1>
         </div>
-    </header>
 
-    <!-- Perfil  -->
-    <main class="container my-5">
-        <div class="row">
-            <!-- Info usuario -->
-            <div class="col-md-4 text-center">
-                <div class="contenedor-perfil card shadow-sm p-3">
-                    <img src="../static/assets/usuario1.png" alt="Foto de perfil" class="rounded-circle mb-3"
-                        width="120" height="120">
-                    <h4 class="fw-bold">Nombre del Usuario</h4>
-                    <p class="text-muted">usuario@email.com</p>
-                    <p class="small">boenas</p>
-                    <button class="btn btn-success btn-sm">Editar perfil</button>
-                    <a href="login.html">Cerrar sesión</a>
-                </div>
+        <!-- Menú de navegación -->
+        <nav class="d-flex align-items-center gap-3">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a th:href="@{/}" class="nav-link text-white">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/recetas}" class="nav-link text-white">Recetas</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/buscar}" class="nav-link text-white">Buscar por Ingredientes</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/ideas}" class="nav-link text-white">Ideas</a>
+                </li>
+            </ul>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-light btn-sm text-success fw-bold">
+                    Cerrar sesión
+                </button>
+            </form>
+        </nav>
+    </div>
+</header>
+
+<!-- Perfil  -->
+<main class="container my-5">
+    <div class="row">
+        <!-- Info usuario -->
+        <div class="col-md-4 text-center">
+            <div class="contenedor-perfil card shadow-sm p-3">
+                <img th:src="@{/assets/usuario1.png}" src="../assets/usuario1.png" alt="Foto de perfil">
+                <h4 class="fw-bold" th:text="${usuario.nombre}">Nombre del Usuario</h4>
+                <p class="correo" th:text="${usuario.correo}">usuario@email.com</p>
+                <p class="estado">boenas</p>
+                <button class="btn btn-success btn-sm">Editar perfil</button>
             </div>
+        </div>
 
-            <!-- Secciones del perfil -->
-            <div class="col-md-8">
+        <!-- Secciones del perfil -->
+        <div class="col-md-8">
+            <div class="panel-perfil p-4">
                 <ul class="nav nav-tabs" id="perfilTabs" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
-                            type="button" role="tab">Información</button>
+                                type="button" role="tab">Información</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="seguridad-tab" data-bs-toggle="tab" data-bs-target="#seguridad"
-                            type="button" role="tab">Seguridad</button>
+                                type="button" role="tab">Seguridad</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="recetas-tab" data-bs-toggle="tab" data-bs-target="#recetas"
-                            type="button" role="tab">Mis Recetas</button>
+                                type="button" role="tab">Mis Recetas</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="preferencias-tab" data-bs-toggle="tab"
-                            data-bs-target="#preferencias" type="button" role="tab">Preferencias</button>
+                                data-bs-target="#preferencias" type="button" role="tab">Preferencias</button>
                     </li>
                 </ul>
 
-                <div class="tab-content p-3 border border-top-0 rounded-bottom shadow-sm">
+                <div class="tab-content mt-4">
                     <!-- Información -->
                     <div class="tab-pane fade show active" id="info" role="tabpanel">
                         <h5>Datos personales</h5>
-                        <ul class="list-unstyled">
-                            <li><strong>Nombre:</strong> Juan Pérez</li>
-                            <li><strong>Email:</strong> juanperez@example.com</li>
-                            <li><strong>Biografía:</strong> Me encanta experimentar con recetas nuevas.</li>
-                        </ul>
+                        <div class="info-grid">
+                            <div>
+                                <span class="label">Nombre</span>
+                                <p>
+                                    <span th:text="${usuario.nombre}">nombre</span>
+                                    <span th:text="${usuario.apellido}">apellido</span>
+                                </p>
+                            </div>
+                            <div>
+                                <span class="label">Teléfono</span>
+                                <p th:text="${usuario.telefono}">999000999</p>
+                            </div>
+                            <div>
+                                <span class="label">Email</span>
+                                <p th:text="${usuario.correo}">nombre</p>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Seguridad -->
@@ -105,7 +121,7 @@
                         <p>Aquí aparecerán las recetas creadas o guardadas.</p>
                         <div class="d-flex gap-2 flex-wrap">
                             <div class="card" style="width: 12rem;">
-                                <img src="../assets/plato1.jpg" class="card-img-top" alt="Receta ejemplo">
+                                <img th:src="@{/assets/plato1.jpg}" src="../assets/plato1.jpg" class="card-img-top" alt="Receta ejemplo">
                                 <div class="card-body">
                                     <h6 class="card-title">Plato1</h6>
                                 </div>
@@ -137,54 +153,55 @@
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
-    <!-- FOOTER -->
-    <footer class="bg-dark text-white pt-5 pb-3 mt-5">
-        <div class="container">
-            <div class="row text-center text-md-start">
-                <!-- Columna 1-->
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Recetas al Alcance</h5>
-                    <p>
-                        Plataforma de recetas saludables y económicas.
-                        Aprende a cocinar fácil, rápido y con lo que ya tienes en casa.
-                    </p>
-                </div>
-
-                <!-- Columna 2-->
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Enlaces</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="index.html" class="text-white text-decoration-none">Inicio</a></li>
-                        <li><a href="recetas.html" class="text-white text-decoration-none">Recetas</a></li>
-                        <li><a href="buscar.html" class="text-white text-decoration-none">Buscar por Ingredientes</a>
-                        </li>
-                        <li><a href="ideas.html" class="text-white text-decoration-none">Ideas</a></li>
-                        <li><a href="contacto.html" class="text-white text-decoration-none">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <!-- Columna 3 -->
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Síguenos</h5>
-                    <a href="#" class="text-white fs-4 me-3"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="text-white fs-4 me-3"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="text-white fs-4"><i class="bi bi-twitter"></i></a>
-                </div>
-            </div>
-
-            <hr class="border-light">
-
-            <div class="text-center">
-                <p class="mb-0">
-                    <span id="year"></span> Recetas al Alcance.
+<!-- FOOTER -->
+<footer class="bg-dark text-white pt-5 pb-3 mt-5">
+    <div class="container">
+        <div class="row text-center text-md-start">
+            <!-- Columna 1-->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Recetas al Alcance</h5>
+                <p>
+                    Plataforma de recetas saludables y económicas.
+                    Aprende a cocinar fácil, rápido y con lo que ya tienes en casa.
                 </p>
             </div>
+
+            <!-- Columna 2-->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Enlaces</h5>
+                <ul class="list-unstyled">
+                    <li><a th:href="@{/}" class="text-white text-decoration-none">Inicio</a></li>
+                    <li><a th:href="@{/recetas}" class="text-white text-decoration-none">Recetas</a></li>
+                    <li><a th:href="@{/buscar}" class="text-white text-decoration-none">Buscar por Ingredientes</a>
+                    </li>
+                    <li><a th:href="@{/ideas}" class="text-white text-decoration-none">Ideas</a></li>
+                    <li><a th:href="@{/contacto}" class="text-white text-decoration-none">Contacto</a></li>
+                </ul>
+            </div>
+
+            <!-- Columna 3 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Síguenos</h5>
+                <a href="#" class="text-white fs-4 me-3"><i class="bi bi-facebook"></i></a>
+                <a href="#" class="text-white fs-4 me-3"><i class="bi bi-instagram"></i></a>
+                <a href="#" class="text-white fs-4"><i class="bi bi-twitter"></i></a>
+            </div>
         </div>
-    </footer>
-    <!-- Bootstrap JS  -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <hr class="border-light">
+
+        <div class="text-center">
+            <p class="mb-0">
+                <span id="year"></span> Recetas al Alcance.
+            </p>
+        </div>
+    </div>
+</footer>
+<!-- Bootstrap JS  -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 
