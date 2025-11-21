@@ -8,37 +8,38 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
 
-    @GetMapping("/")
-    public String home(){
+    @GetMapping({ "/", "/index", "/index.html" })
+    public String home() {
         return "index";
     }
 
-    @GetMapping("/login")
-    public String login(){
+    @GetMapping({ "/login", "/login.html" })
+    public String login() {
         return "login";
     }
 
-    @GetMapping("/registro")
-    public String registro(Model model){
-        model.addAttribute("usuario",new User());
+    @GetMapping({ "/registro", "/registro.html" })
+    public String registro(Model model) {
+        model.addAttribute("usuario", new User());
         return "registro";
     }
 
-    @GetMapping("/buscar")
-    public String buscar(Model model){
-        model.addAttribute("usuario",new User());
+    @GetMapping({ "/buscar", "/buscar.html" })
+    public String buscar(Model model) {
+        model.addAttribute("usuario", new User());
         return "buscar";
     }
-    @GetMapping("/recetas")
-    public String recetas(Model model){
-        model.addAttribute("usuario",new User());
+
+    @GetMapping({ "/recetas", "/recetas.html" })
+    public String recetas(Model model) {
+        model.addAttribute("usuario", new User());
         return "recetas";
     }
-    @GetMapping("/ideas")
-    public String ideas(Model model){
-        model.addAttribute("usuario",new User());
+
+    @GetMapping({ "/ideas", "/ideas.html" })
+    public String ideas(Model model) {
+        model.addAttribute("usuario", new User());
         return "ideas";
     }
-
 
 }

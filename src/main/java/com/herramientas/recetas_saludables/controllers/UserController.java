@@ -19,18 +19,18 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
-        this.userService=userService;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public String listar(Model model){
-        model.addAttribute("usuarioLista",userService.listarTodos());
+    public String listar(Model model) {
+        model.addAttribute("usuarioLista", userService.listarTodos());
         return "index";
     }
 
     @PostMapping("/guardarUsuario")
-    public String guardarUsuario(@ModelAttribute User usuario){
+    public String guardarUsuario(@ModelAttribute User usuario) {
 
         usuario.setContrasena(passwordEncoder.encode(usuario.getContrasena()));
         usuario.setRol("USER");
@@ -40,9 +40,25 @@ public class UserController {
     }
 
     @GetMapping("/perfil")
-    public String perfil(@AuthenticationPrincipal UserDetails userDetails, Model model){
-        User usuarioActual = userService.obtenerPorCorreo(userDetails.getUsername());
-        model.addAttribute("usuario", usuarioActual);
-        return "perfil"; // Thymeleaf template
+    public String perfil(@AuthenticationPrincipal UserDetails userDetails,
+            @RequestParam(required = false) String correo,
+            Model model) {
+
+        User usuario;
+
+        if (userDetails != null) {
+            // Usuario logueado
+            usuario = userService.obtenerPorCorreo(userDetails.getUsername());
+        } else if (correo != null) {
+            // Usuario público vía parámetro
+            usuario = userService.obtenerPorCorreo(correo);
+        } else {
+            // Ningún usuario, mostrar mensaje público
+            usuario = null;
+        }
+
+        model.addAttribute("usuario", usuario);
+        return "perfil"; // misma plantilla Thymeleaf
     }
+
 }
