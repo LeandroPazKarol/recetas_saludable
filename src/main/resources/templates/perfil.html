@@ -70,32 +70,25 @@
 <main class="container my-5">
     <div class="row g-4">
 
-        <!-- Card de información del usuario -->
+        <!-- Perfil Usuario -->
         <div class="col-md-4">
-            <div class="card shadow-sm text-center">
-                <!-- Imagen de perfil -->
-                <img th:if="${usuario != null}" th:src="@{/assets/usuario1.png}" 
-                     class="card-img-top rounded-circle mx-auto mt-3" 
-                     style="width: 120px; height: 120px; object-fit: cover;" alt="Foto de perfil">
-                <img th:unless="${usuario != null}" src="../assets/usuario-publico.png" 
-                     class="card-img-top rounded-circle mx-auto mt-3" 
-                     style="width: 120px; height: 120px; object-fit: cover;" alt="Usuario público">
+            <div class="card shadow-sm text-center p-3 profile-card">
+                <img th:src="@{/assets/usuario1.png}" 
+     class="mx-auto mb-3" style="width:120px; height:120px; border-radius:50%; object-fit:cover;" 
+     alt="Usuario público">
 
-                <div class="card-body">
-                    <h4 class="card-title fw-bold" th:text="${usuario != null} ? ${usuario.nombre} + ' ' + ${usuario.apellido} : 'Usuario Público'">Nombre del Usuario</h4>
-                    <p class="text-muted mb-1" th:text="${usuario != null} ? ${usuario.correo} : 'info@ejemplo.com'">usuario@email.com</p>
-                    
-                    <span th:if="${usuario != null}" class="badge bg-success">Activo</span>
-                    <span th:unless="${usuario != null}" class="badge bg-secondary">Invitado</span>
+                <h4 class="fw-bold mb-1">Leandro Franco</h4>
+                <p class="text-muted mb-2">leandro@gmail.com</p>
+                
+                <span class="badge bg-secondary mb-3">Invitado</span>
 
-                    <div class="mt-3" th:if="${usuario != null}">
-                        <a href="#" class="btn btn-primary btn-sm w-100">Editar perfil</a>
-                    </div>
+                <div>
+                    <a href="#" class="btn btn-primary btn-sm w-100">Editar perfil</a>
                 </div>
             </div>
         </div>
 
-        <!-- Secciones del perfil -->
+        <!-- Contenido Perfil -->
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-body">
@@ -105,84 +98,91 @@
                             <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
                                     type="button" role="tab">Información</button>
                         </li>
-                        <li class="nav-item" role="presentation" th:if="${usuario != null}">
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="guardados-tab" data-bs-toggle="tab" data-bs-target="#guardados"
                                     type="button" role="tab">Guardados</button>
                         </li>
-                        <li class="nav-item" role="presentation" th:if="${usuario != null}">
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="favoritos-tab" data-bs-toggle="tab" data-bs-target="#favoritos"
                                     type="button" role="tab">Favoritos</button>
                         </li>
-                        <li class="nav-item" role="presentation" th:if="${usuario != null}">
+                        <li class="nav-item" role="presentation">
                             <button class="nav-link" id="preferencias-tab" data-bs-toggle="tab" data-bs-target="#preferencias"
                                     type="button" role="tab">Preferencias</button>
                         </li>
                     </ul>
 
-                    <!-- Contenido de los tabs -->
+                    <!-- Tab Content -->
                     <div class="tab-content" id="perfilTabsContent">
+
                         <!-- Información -->
                         <div class="tab-pane fade show active" id="info" role="tabpanel">
                             <h5 class="mb-3">Datos personales</h5>
                             <dl class="row">
                                 <dt class="col-sm-4">Nombre</dt>
-                                <dd class="col-sm-8" th:text="${usuario != null} ? ${usuario.nombre} + ' ' + ${usuario.apellido} : 'Usuario Público'">Nombre Apellido</dd>
+                                <dd class="col-sm-8">Leandro Franco</dd>
 
                                 <dt class="col-sm-4">Teléfono</dt>
-                                <dd class="col-sm-8" th:text="${usuario != null} ? ${usuario.telefono} : 'No disponible'">999000999</dd>
+                                <dd class="col-sm-8">999000999</dd>
 
                                 <dt class="col-sm-4">Email</dt>
-                                <dd class="col-sm-8" th:text="${usuario != null} ? ${usuario.correo} : 'info@ejemplo.com'">usuario@email.com</dd>
+                                <dd class="col-sm-8">leandro@gmail.com</dd>
                             </dl>
                         </div>
 
                         <!-- Guardados -->
-                        <div class="tab-pane fade" id="guardados" role="tabpanel" th:if="${usuario != null}">
+                        <div class="tab-pane fade" id="guardados" role="tabpanel">
                             <h5 class="mb-3">Recetas Guardadas</h5>
                             <div class="row g-3">
-                                <div class="col-sm-6 col-md-4 col-lg-3" th:each="receta : ${usuario.guardadas}">
+                                <div class="col-sm-6 col-md-4 col-lg-3">
                                     <div class="card h-100">
-                                        <img th:src="@{/assets/plato1.jpg}" class="card-img-top" alt="Receta">
+                                        <img src="../assets/plato1.jpg" class="card-img-top" alt="Receta">
                                         <div class="card-body">
-                                            <h6 class="card-title" th:text="${receta.nombre}">Nombre Receta</h6>
+                                            <h6 class="card-title">Arroz Chaufa</h6>
                                         </div>
                                     </div>
                                 </div>
-                                <p th:if="${#lists.isEmpty(usuario.guardadas)}" class="text-muted">No tienes recetas guardadas.</p>
+                                <div class="col-sm-6 col-md-4 col-lg-3">
+                                    <div class="card h-100">
+                                        <img src="../assets/plato2.jpg" class="card-img-top" alt="Receta">
+                                        <div class="card-body">
+                                            <h6 class="card-title">Batido de Plátano y Avena</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Favoritos -->
-                        <div class="tab-pane fade" id="favoritos" role="tabpanel" th:if="${usuario != null}">
+                        <div class="tab-pane fade" id="favoritos" role="tabpanel">
                             <h5 class="mb-3">Recetas Favoritas</h5>
                             <div class="row g-3">
-                                <div class="col-sm-6 col-md-4 col-lg-3" th:each="receta : ${usuario.favoritos}">
+                                <div class="col-sm-6 col-md-4 col-lg-3">
                                     <div class="card h-100 border-danger">
-                                        <img th:src="@{/assets/plato1.jpg}" class="card-img-top" alt="Receta favorita">
+                                        <img src="../assets/plato2.jpg" class="card-img-top" alt="Receta favorita">
                                         <div class="card-body">
-                                            <h6 class="card-title" th:text="${receta.nombre}">Nombre Receta</h6>
+                                            <h6 class="card-title">Mini Pizzas de Pan de Molde</h6>
                                         </div>
                                     </div>
                                 </div>
-                                <p th:if="${#lists.isEmpty(usuario.favoritos)}" class="text-muted">No tienes recetas favoritas.</p>
                             </div>
                         </div>
 
                         <!-- Preferencias -->
-                        <div class="tab-pane fade" id="preferencias" role="tabpanel" th:if="${usuario != null}">
+                        <div class="tab-pane fade" id="preferencias" role="tabpanel">
                             <h5 class="mb-3">Preferencias</h5>
                             <form>
                                 <div class="mb-3">
                                     <label for="tema" class="form-label">Tema</label>
-                                    <select class="form-select" id="tema" th:value="${usuario.tema}">
-                                        <option>Claro</option>
+                                    <select class="form-select" id="tema">
+                                        <option selected>Claro</option>
                                         <option>Oscuro</option>
                                     </select>
                                 </div>
                                 <div class="mb-3">
                                     <label for="idioma" class="form-label">Idioma</label>
-                                    <select class="form-select" id="idioma" th:value="${usuario.idioma}">
-                                        <option>Español</option>
+                                    <select class="form-select" id="idioma">
+                                        <option selected>Español</option>
                                         <option>Inglés</option>
                                     </select>
                                 </div>
@@ -190,17 +190,14 @@
                             </form>
                         </div>
 
-                        <!-- Mensaje para público -->
-                        <div th:if="${usuario == null}" class="text-center mt-3">
-                            <p>Este perfil es público. <a th:href="@{/login}">Inicia sesión</a> para ver más información y tus recetas guardadas.</p>
-                        </div>
-
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 </main>
+
 
 
 <!-- ================= FOOTER ================= -->
