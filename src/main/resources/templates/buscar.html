@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Buscar Recetas</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
-    <link rel="stylesheet" href="..static/css/style.css" />
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Buscar Recetas</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-
 <body>
-    <!-- ================= HEADER ================= -->
- <header class="bg-success text-white">
+<header class="bg-success text-white">
     <nav class="navbar navbar-expand-lg navbar-dark container">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
@@ -66,620 +61,67 @@
     </nav>
 </header>
 
-    <!-- ================= MAIN CONTENT ================= -->
-    <main class="container my-5">
-        <section class="text-center mb-5">
-            <h1 class="fw-bold">Busca por Ingredientes 🥑</h1>
-            <p class="fs-5 text-muted">
-                Dinos qué tienes en tu refri, y te diremos qué cocinar.
-            </p>
-        </section>
+<div class="container my-5">
+	<h1 class="mb-3">Buscar Recetas</h1>
 
-        <section class="row g-5">
-            <div class="col-lg-7">
-                <h4 class="fw-bold">Ingredientes Populares</h4>
-                <p class="text-muted">Selecciona lo que tienes a la mano.</p>
+	<div class="row">
+		<div class="col-lg-8">
+			<form id="search-form" class="card p-3 mb-4">
+				<div class="mb-3">
+					<label for="search-name" class="form-label">Nombre de la receta</label>
+					<input id="search-name" class="form-control" placeholder="Ej: ensalada, sopa...">
+				</div>
 
-                <div class="input-group mb-3 shadow-sm">
-                    <input type="text" class="form-control" placeholder="¿Buscas algo más? Escríbelo aquí..." />
-                    <button class="btn btn-success" type="button">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
+			<div class="mb-3">
+				<label class="form-label">Precio máximo (soles)</label>
+				<div class="d-flex align-items-center gap-2">
+					<input id="price-slider" type="range" min="0" max="300" value="300" class="form-range">
+					<input id="price-input" type="number" min="0" max="300" value="300" class="form-control" style="width: 80px;">
+				</div>
+				<small class="text-muted">Rango: S/ 0 - S/ 300</small>
+			</div>				<div class="d-flex justify-content-end">
+					<button type="submit" class="btn btn-success me-2">Buscar</button>
+					<button type="button" id="clear-btn" class="btn btn-outline-secondary">Limpiar</button>
+				</div>
+			</form>
 
-                <div class="accordion" id="accordionIngredients">
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="bi bi-egg-fried fs-5 me-2"></i>
-                                <strong>Proteínas</strong>
-                            </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
-                            <div class="accordion-body d-flex flex-wrap gap-2">
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-pollo" value="Pollo"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-pollo">Pollo 🍗</label>
+			<section>
+				<h5 class="mb-3">Resultados</h5>
+				<div id="results" class="row row-cols-1 row-cols-md-2 g-3"></div>
+				<p id="no-results" class="text-muted mt-3" style="display:none">No se encontraron recetas.</p>
+			</section>
+		</div>
 
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-huevo" value="Huevos"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-huevo">Huevos 🥚</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-atun" value="Atun"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-atun">Atún en lata 🥫</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-lentejas"
-                                    value="Lentejas" autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-lentejas">Lentejas</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-queso" value="Queso"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-queso">Queso 🧀</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="bi bi-basket-fill fs-5 me-2"></i>
-                                <strong>Carbohidratos</strong>
-                            </button>
-                        </h2>
-                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo">
-                            <div class="accordion-body d-flex flex-wrap gap-2">
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-arroz" value="Arroz"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-arroz">Arroz 🍚</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-pasta" value="Pasta"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-pasta">Pasta / Fideos 🍝</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-papa" value="Papa"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-papa">Papa 🥔</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-pan" value="Pan"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-pan">Pan 🍞</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-avena" value="Avena"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-avena">Avena</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                <i class="bi bi-carrot-fill fs-5 me-2"></i>
-                                <strong>Frutas y Verduras</strong>
-                            </button>
-                        </h2>
-                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree">
-                            <div class="accordion-body d-flex flex-wrap gap-2">
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-tomate" value="Tomate"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-tomate">Tomate 🍅</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-cebolla"
-                                    value="Cebolla" autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-cebolla">Cebolla 🧅</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-palta" value="Palta"
-                                    autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-palta">Palta (Aguacate) 🥑</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-zanahoria"
-                                    value="Zanahoria" autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-zanahoria">Zanahoria 🥕</label>
-
-                                <input type="checkbox" class="btn-check ingredient-check" id="ing-platano"
-                                    value="Platano" autocomplete="off" />
-                                <label class="btn btn-outline-success" for="ing-platano">Plátano 🍌</label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-5">
-                <div class="sticky-top" style="top: 2rem">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h4 class="fw-bold">Tu Lista de Ingredientes 🛒</h4>
-                            <hr />
-                            <div id="lista-ingredientes" class="mb-3">
-                                <p id="placeholder-lista" class="text-muted">
-                                    Aún no has agregado nada...
-                                </p>
-                            </div>
-                            <button class="btn btn-success btn-lg w-100" id="btn-buscar-recetas">
-                                <i class="bi bi-search me-2"></i>Buscar Recetas
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <hr class="my-5" />
-
-        <section id="resultados-busqueda" class="mb-5">
-            <h2 class="fw-bold mb-4">Resultados Sugeridos</h2>
-
-            <p id="no-results-message" class="fs-5 text-muted" style="display: none">
-                Lo sentimos, no se encontraron recetas con
-                <b class="text-dark">todos</b> esos ingredientes. Intenta con menos.
-            </p>
-<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <div class="col" data-ingredients="Pan,Palta,Huevos">
-        <div class="card h-100 shadow-sm">
-            <div class="position-relative">
-                <img th:src="@{/assets/recetas/tostada.jpg}" class="card-img-top" 
-                     alt="Tostadas con palta" style="height: 250px; object-fit: cover" loading="lazy"/>
-                
-                <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-                   style="border-radius: 50%" title="Me Gusta">
-                    <i class="bi bi-heart fs-5 text-danger"></i>
-                </a>
-                <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-                   style="border-radius: 50%" title="Guardar Receta">
-                    <i class="bi bi-bookmark fs-5 text-success"></i>
-                </a>
-            </div>
-
-            <div class="card-body">
-                <h5 class="card-title fw-bold">Tostadas con Palta y Huevo</h5>
-                <p class="card-text">Un desayuno completo y rápido...</p>
-
-                <div class="d-flex justify-content-around text-center my-3 border-top border-bottom py-2">
-                    <div><i class="bi bi-clock fs-4 text-success"></i>
-                        <div class="small fw-bold">10 min</div>
-                    </div>
-                    <div><i class="bi bi-piggy-bank-fill fs-4 text-success"></i>
-                        <div class="small fw-bold">Económico</div>
-                    </div>
-                    <div><i class="bi bi-bar-chart-line fs-4 text-success"></i>
-                        <div class="small fw-bold">Fácil</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-footer bg-white border-0 pb-3">
-                <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                        data-bs-target="#modalTostadas">Ver Receta</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="col" data-ingredients="Papa,Cebolla,Zanahoria">
-    <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-            <img th:src="@{/assets/recetas/crema.jpg}" class="card-img-top" 
-                 alt="Crema de zapallo" style="height: 250px; object-fit: cover" loading="lazy"/>
-            
-            <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Me Gusta">
-                <i class="bi bi-heart fs-5 text-danger"></i>
-            </a>
-            <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Guardar Receta">
-                <i class="bi bi-bookmark fs-5 text-success"></i>
-            </a>
-        </div>
-
-        <div class="card-body">
-            <h5 class="card-title fw-bold">Crema de Zapallo (Calabaza)</h5>
-            <p class="card-text">Reconfortante, barata y perfecta para una cena ligera...</p>
-
-            <div class="d-flex justify-content-around text-center my-3 border-top border-bottom py-2">
-                <div><i class="bi bi-clock fs-4 text-success"></i>
-                    <div class="small fw-bold">30 min</div>
-                </div>
-                <div><i class="bi bi-piggy-bank-fill fs-4 text-success"></i>
-                    <div class="small fw-bold">Económico</div>
-                </div>
-                <div><i class="bi bi-bar-chart-line fs-4 text-success"></i>
-                    <div class="small fw-bold">Fácil</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer bg-white border-0 pb-3">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                    data-bs-target="#modalCrema">Ver Receta</button>
-        </div>
-    </div>
-</div>
-<div class="col" data-ingredients="Arroz,Huevos">
-    <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-            <img th:src="@{/assets/recetas/chaufa.jpeg}" class="card-img-top" 
-                 alt="Arroz chaufa" style="height: 250px; object-fit: cover" loading="lazy"/>
-            
-            <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Me Gusta">
-                <i class="bi bi-heart fs-5 text-danger"></i>
-            </a>
-            <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Guardar Receta">
-                <i class="bi bi-bookmark fs-5 text-success"></i>
-            </a>
-        </div>
-
-        <div class="card-body">
-            <h5 class="card-title fw-bold">Arroz Chaufa (Versión Estudiante)</h5>
-            <p class="card-text">Aprovecha el arroz del día anterior. Rápido y barato...</p>
-
-            <div class="d-flex justify-content-around text-center my-3 border-top border-bottom py-2">
-                <div><i class="bi bi-clock fs-4 text-success"></i>
-                    <div class="small fw-bold">15 min</div>
-                </div>
-                <div><i class="bi bi-piggy-bank-fill fs-4 text-success"></i>
-                    <div class="small fw-bold">Muy Econ.</div>
-                </div>
-                <div><i class="bi bi-bar-chart-line fs-4 text-success"></i>
-                    <div class="small fw-bold">Fácil</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer bg-white border-0 pb-3">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                    data-bs-target="#modalChaufa">Ver Receta</button>
-        </div>
-    </div>
+		<div class="col-lg-4">
+			<div class="card p-3 mb-4">
+				<h5>Filtrar por ingredientes</h5>
+				<div id="ingredients-list" style="max-height:60vh; overflow:auto"></div>
+			</div>
+		</div>
+	</div>
 </div>
 
-<div class="col" data-ingredients="Platano,Avena">
-    <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-            <img th:src="@{/assets/recetas/batido.avif}" class="card-img-top" 
-                 alt="Batido de frutas" style="height: 250px; object-fit: cover" loading="lazy"/>
-            
-            <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Me Gusta">
-                <i class="bi bi-heart fs-5 text-danger"></i>
-            </a>
-            <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Guardar Receta">
-                <i class="bi bi-bookmark fs-5 text-success"></i>
-            </a>
-        </div>
-
-        <div class="card-body">
-            <h5 class="card-title fw-bold">Batido de Plátano y Avena</h5>
-            <p class="card-text">Un snack o desayuno al paso para cuando no tienes tiempo...</p>
-
-            <div class="d-flex justify-content-around text-center my-3 border-top border-bottom py-2">
-                <div><i class="bi bi-clock fs-4 text-success"></i>
-                    <div class="small fw-bold">5 min</div>
-                </div>
-                <div><i class="bi bi-piggy-bank-fill fs-4 text-success"></i>
-                    <div class="small fw-bold">Económico</div>
-                </div>
-                <div><i class="bi bi-bar-chart-line fs-4 text-success"></i>
-                    <div class="small fw-bold">Muy Fácil</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer bg-white border-0 pb-3">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                    data-bs-target="#modalBatido">Ver Receta</button>
-        </div>
-    </div>
-</div>
-<div class="col" data-ingredients="Pan,Queso">
-    <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-            <img th:src="@{/assets/recetas/pizza.avif}" class="card-img-top" 
-                 alt="Mini pizzas" style="height: 250px; object-fit: cover" loading="lazy"/>
-            
-            <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Me Gusta">
-                <i class="bi bi-heart fs-5 text-danger"></i>
-            </a>
-            <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-               style="border-radius: 50%" title="Guardar Receta">
-                <i class="bi bi-bookmark fs-5 text-success"></i>
-            </a>
-        </div>
-
-        <div class="card-body">
-            <h5 class="card-title fw-bold">Mini Pizzas de Pan de Molde</h5>
-            <p class="card-text">Un antojo rápido para el fin de semana de estudio...</p>
-
-            <div class="d-flex justify-content-around text-center my-3 border-top border-bottom py-2">
-                <div><i class="bi bi-clock fs-4 text-success"></i>
-                    <div class="small fw-bold">15 min</div>
-                </div>
-                <div><i class="bi bi-piggy-bank-fill fs-4 text-success"></i>
-                    <div class="small fw-bold">Económico</div>
-                </div>
-                <div><i class="bi bi-bar-chart-line fs-4 text-success"></i>
-                    <div class="small fw-bold">Fácil</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card-footer bg-white border-0 pb-3">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                    data-bs-target="#modalPizza">Ver Receta</button>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalTostadas" tabindex="-1" aria-labelledby="modalTostadasLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalTostadasLabel">Tostadas con Palta y Huevo</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <div class="modal-body">
-                <img th:src="@{/assets/recetas/tostada.jpg}" class="img-fluid rounded mb-3"
-                     alt="Tostadas con palta" loading="lazy"/>
-                
-                <h6 class="fw-bold">Ingredientes:</h6>
-                <ul>
-                    <li>2 rebanadas de pan de molde</li>
-                    <li>1 palta (aguacate) madura</li>
-                    <li>2 huevos</li>
-                    <li>Sal y pimienta al gusto</li>
-                    <li>Opcional: Hojuelas de ají</li>
-                </ul>
-
-                <h6 class="fw-bold mt-4">Preparación (Paso a paso):</h6>
-                <ol>
-                    <li>Tuesta las rebanadas de pan.</li>
-                    <li>Mientras tanto, prepara los huevos (pueden ser fritos, revueltos o poché).</li>
-                    <li>Tritura la palta con un tenedor y sazónala con sal y pimienta.</li>
-                    <li>Unta la palta sobre las tostadas.</li>
-                    <li>Coloca un huevo encima de cada tostada.</li>
-                    <li>Decora con hojuelas de ají si lo deseas. ¡A disfrutar!</li>
-                </ol>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalPasta" tabindex="-1" aria-labelledby="modalPastaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalPastaLabel">Pasta con Atún y Brócoli</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <div class="modal-body">
-                <img th:src="@{/assets/recetas/pasta y palta.jpg}" class="img-fluid rounded mb-3"
-                     alt="Pasta con atún" loading="lazy"/>
-                
-                <h6 class="fw-bold">Ingredientes:</h6>
-                <ul>
-                    <li>150g de pasta (tornillos, penne, etc.)</li>
-                    <li>1 lata de atún (en aceite o agua)</li>
-                    <li>1 taza de brócoli (en pequeños arbolitos)</li>
-                    <li>1 diente de ajo picado (opcional)</li>
-                    <li>Aceite de oliva, sal y pimienta al gusto</li>
-                    <li>Queso parmesano rallado (opcional)</li>
-                </ul>
-
-                <h6 class="fw-bold mt-4">Preparación (Paso a paso):</h6>
-                <ol>
-                    <li>Hierve agua en una olla grande con sal. Cocina la pasta según las instrucciones del paquete.</li>
-                    <li>En los últimos 3 minutos de cocción de la pasta, añade el brócoli a la misma olla.</li>
-                    <li>Mientras tanto, en una sartén pequeña, calienta un chorrito de aceite de oliva y sofríe el ajo (si lo usas) hasta que esté dorado.</li>
-                    <li>Escurre la pasta y el brócoli.</li>
-                    <li>Devuelve la pasta y el brócoli a la olla (o a un bol grande). Añade el atún escurrido, el sofrito de ajo y aceite, sal y pimienta.</li>
-                    <li>Revuelve bien todo. Sirve caliente con queso parmesano por encima.</li>
-                </ol>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalCrema" tabindex="-1" aria-labelledby="modalCremaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalCremaLabel">Crema de Zapallo (Calabaza)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <img th:src="@{/assets/recetas/crema.jpg}" class="img-fluid rounded mb-3" 
-                     alt="Crema de zapallo" loading="lazy"/>
-
-                <h6 class="fw-bold">Ingredientes:</h6>
-                <ul>
-                    <li>1/2 kg de zapallo (calabaza) picado</li>
-                    <li>1/2 cebolla roja picada</li>
-                    <li>1 papa amarilla pequeña, pelada y picada</li>
-                    <li>1 chorrito de leche evaporada (o crema de leche)</li>
-                    <li>2 tazas de caldo de verdura (o agua)</li>
-                    <li>Sal, pimienta y nuez moscada (opcional) al gusto</li>
-                    <li>Crutones de pan (opcional)</li>
-                </ul>
-
-                <h6 class="fw-bold mt-4">Preparación (Paso a paso):</h6>
-                <ol>
-                    <li>En una olla, sofríe la cebolla con un poco de aceite hasta que esté transparente.</li>
-                    <li>Añade el zapallo y la papa. Remueve por un par de minutos.</li>
-                    <li>Cubre con el caldo (o agua) y deja hervir. Baja el fuego y cocina tapado por 15-20 minutos, o hasta que el zapallo y la papa estén muy suaves.</li>
-                    <li>Con cuidado, vierte todo en una licuadora y procesa hasta obtener una crema suave.</li>
-                    <li>Devuelve la crema a la olla. Añade el chorrito de leche, sal, pimienta y una pizca de nuez moscada.</li>
-                    <li>Calienta por un par de minutos sin dejar que hierva. Sirve con crutones.</li>
-                </ol>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalChaufa" tabindex="-1" aria-labelledby="modalChaufaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalChaufaLabel">Arroz Chaufa (Versión Estudiante)</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <img th:src="@{/assets/recetas/chaufa.jpeg}" class="img-fluid rounded mb-3" 
-                     alt="Arroz chaufa" loading="lazy"/>
-
-                <h6 class="fw-bold">Ingredientes:</h6>
-                <ul>
-                    <li>1 taza de arroz cocido (¡mejor si es del día anterior!)</li>
-                    <li>1 huevo</li>
-                    <li>1 hotdog picado (o trocitos de pollo, jamón, etc.)</li>
-                    <li>1/4 de pimiento rojo picado</li>
-                    <li>2 tallos de cebolla china (cebollín) picada</li>
-                    <li>2-3 cucharadas de sillao (salsa de soja)</li>
-                    <li>1 cucharadita de aceite de ajonjolí (opcional, pero clave)</li>
-                    <li>Aceite vegetal</li>
-                </ul>
-
-                <h6 class="fw-bold mt-4">Preparación (Paso a paso):</h6>
-                <ol>
-                    <li>En un bol, bate el huevo con un tenedor. Haz una tortilla fina en una sartén o wok con un poco de aceite. Retírala, enróllala y pícala. Reserva.</li>
-                    <li>En la misma sartén, añade más aceite y saltea el hotdog y el pimiento hasta que estén cocidos.</li>
-                    <li>Añade el arroz cocido a la sartén. Con una cuchara, "desgránalo" y saltéalo a fuego alto por 2 minutos.</li>
-                    <li>Añade el sillao y mezcla bien hasta que todo el arroz tome color.</li>
-                    <li>Incorpora la tortilla picada y la parte blanca de la cebolla china. Saltea por 1 minuto más.</li>
-                    <li>Apaga el fuego. Añade la parte verde de la cebolla china y el aceite de ajonjolí. Mezcla y sirve al instante.</li>
-                </ol>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="modalBatido" tabindex="-1" aria-labelledby="modalBatidoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalBatidoLabel">Batido de Plátano y Avena</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <img th:src="@{/assets/recetas/batido.avif}" class="img-fluid rounded mb-3" 
-                     alt="Batido de frutas" loading="lazy"/>
-
-                <h6 class="fw-bold">Ingredientes:</h6>
-                <ul>
-                    <li>1 plátano maduro</li>
-                    <li>3 cucharadas de avena (cruda)</li>
-                    <li>1 vaso de leche (de vaca, almendras, soya, la que tengas)</li>
-                    <li>1 cucharadita de miel o algarrobina (opcional)</li>
-                    <li>1/2 cucharadita de canela en polvo (opcional)</li>
-                </ul>
-
-                <h6 class="fw-bold mt-4">Preparación (Paso a paso):</h6>
-                <ol>
-                    <li>Coloca todos los ingredientes en el vaso de la licuadora: el plátano en trozos, la avena, la leche y los opcionales.</li>
-                    <li>Licúa a alta velocidad durante 1 minuto o hasta que la avena se haya triturado bien y no queden grumos.</li>
-                    <li>¡Sirve inmediatamente! Perfecto para un desayuno al paso.</li>
-                </ol>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-      <div class="modal fade" id="modalPizza" tabindex="-1" aria-labelledby="modalPizzaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalPizzaLabel">Mini Pizzas de Pan de Molde</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body">
-                <img th:src="@{/assets/recetas/pizza.avif}" class="img-fluid rounded mb-3" 
-                     alt="Mini pizzas" loading="lazy"/>
-
-                <h6 class="fw-bold">Ingredientes:</h6>
-                <ul>
-                    <li>2 rebanadas de pan de molde</li>
-                    <li>2 cucharadas de salsa de tomate (o ketchup)</li>
-                    <li>Queso mozzarella o edam rallado (al gusto)</li>
-                    <li>Jamón picado, hotdog, pepperoni (lo que tengas)</li>
-                    <li>Orégano en polvo</li>
-                </ul>
-
-                <h6 class="fw-bold mt-4">Preparación (Paso a paso):</h6>
-                <ol>
-                    <li>Coloca las rebanadas de pan en un plato apto para microondas, sartén o freidora de aire.</li>
-                    <li>Esparce la salsa de tomate sobre cada rebanada.</li>
-                    <li>Cubre generosamente con el queso rallado.</li>
-                    <li>Añade el jamón (o el topping que elegiste).</li>
-                    <li>Espolvorea con orégano.</li>
-                    <li><b>Opción Sartén:</b> Calienta a fuego bajo, tapado, hasta que el queso se derrita.</li>
-                    <li><b>Opción Microondas:</b> Calienta por 45-60 segundos, o hasta que el queso se funda.</li>
-                    <li><b>Opción Freidora/Horno:</b> Calienta a 180°C por 3-5 minutos.</li>
-                </ol>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-    </main>
-
-    <!-- ================= FOOTER ================= -->
-    <footer class="bg-dark text-white pt-5 pb-3 mt-5">
+<footer class="bg-dark text-white pt-5 pb-3 mt-5">
         <div class="container">
+
             <div class="row text-center text-md-start">
-                <!-- Columna 1-->
+
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold">Recetas al Alcance</h5>
-                    <p>
-                        Plataforma de recetas saludables y económicas.
-                        Aprende a cocinar fácil, rápido y con lo que ya tienes en casa.
-                    </p>
+                    <p>Plataforma de recetas saludables y económicas.</p>
                 </div>
 
-                <!-- Columna 2-->
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold">Enlaces</h5>
                     <ul class="list-unstyled">
-                        <li><a href="index.html" class="text-white text-decoration-none">Inicio</a></li>
-                        <li><a href="recetas.html" class="text-white text-decoration-none">Recetas</a></li>
-                        <li><a href="buscar.html" class="text-white text-decoration-none">Buscar por Ingredientes</a>
-                        </li>
-                        <li><a href="ideas.html" class="text-white text-decoration-none">Ideas</a></li>
-                        <li><a href="contacto.html" class="text-white text-decoration-none">Contacto</a></li>
+                        <li><a th:href="@{/}" class="text-white text-decoration-none">Inicio</a></li>
+                        <li><a th:href="@{/recetas}" class="text-white text-decoration-none">Recetas</a></li>
+                        <li><a th:href="@{/buscar}" class="text-white text-decoration-none">Buscar por Ingredientes</a></li>
+                        <li><a th:href="@{/ideas}" class="text-white text-decoration-none">Ideas</a></li>
+                        <li><a th:href="@{/contacto}" class="text-white text-decoration-none">Contacto</a></li>
                     </ul>
                 </div>
 
-                <!-- Columna 3 -->
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold">Síguenos</h5>
                     <a href="#" class="text-white fs-4 me-3"><i class="bi bi-facebook"></i></a>
@@ -697,144 +139,126 @@
             </div>
         </div>
     </footer>
-    <!-- Bootstrap JS  -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // --- LÓGICA PARA AGREGAR/QUITAR INGREDIENTES A "TU LISTA" ---
-        const checkboxes = document.querySelectorAll(".ingredient-check");
-        const listaIngredientes = document.getElementById("lista-ingredientes");
-        const placeholder = document.getElementById("placeholder-lista");
-        const addedIngredients = new Map();
+	const API_RECIPES = '/api/recetas';
+	const API_INGREDIENTS = '/api/ingredientes';
 
-        function updateListVisibility() {
-            if (addedIngredients.size === 0) {
-                placeholder.style.display = "block";
-            } else {
-                placeholder.style.display = "none";
-            }
-        }
+	document.addEventListener('DOMContentLoaded', () => {
+		const form = document.getElementById('search-form');
+		const nameInput = document.getElementById('search-name');
+		const priceSlider = document.getElementById('price-slider');
+		const priceInput = document.getElementById('price-input');
+		const ingredientsList = document.getElementById('ingredients-list');
+		const resultsEl = document.getElementById('results');
+		const noResults = document.getElementById('no-results');
+		const clearBtn = document.getElementById('clear-btn');
 
-        checkboxes.forEach((checkbox) => {
-            checkbox.addEventListener("change", function () {
-                const ingredientName = this.value;
-                if (this.checked) {
-                    const pill = document.createElement("span");
-                    pill.className = "badge bg-success me-2 mb-2 d-inline-flex align-items-center";
-                    pill.textContent = ingredientName;
-                    pill.dataset.ingredient = ingredientName;
-                    const removeBtn = document.createElement("button");
-                    removeBtn.type = "button";
-                    removeBtn.className = "btn-close btn-close-white ms-2";
-                    removeBtn.style.fontSize = "0.65rem";
-                    removeBtn.addEventListener("click", function () {
-                        checkbox.checked = false;
-                        pill.remove();
-                        addedIngredients.delete(ingredientName);
-                        updateListVisibility();
-                    });
-                    pill.appendChild(removeBtn);
-                    listaIngredientes.appendChild(pill);
-                    addedIngredients.set(ingredientName, pill);
-                } else {
-                    if (addedIngredients.has(ingredientName)) {
-                        addedIngredients.get(ingredientName).remove();
-                        addedIngredients.delete(ingredientName);
-                    }
-                }
-                updateListVisibility();
-            });
-        });
-        updateListVisibility();
+		// Sincronizar slider e input
+		priceSlider.addEventListener('input', () => {
+			priceInput.value = priceSlider.value;
+		});
 
-        // --- LÓGICA PARA LOS ÍCONOS DE CORAZÓN/GUARDAR ---
-        const iconButtons = document.querySelectorAll(".toggle-icon-btn");
-        iconButtons.forEach((button) => {
-            button.addEventListener("click", function (event) {
-                event.preventDefault();
-                const icon = this.querySelector("i");
-                if (icon.classList.contains("bi-heart")) {
-                    icon.classList.remove("bi-heart");
-                    icon.classList.add("bi-heart-fill");
-                } else if (icon.classList.contains("bi-heart-fill")) {
-                    icon.classList.remove("bi-heart-fill");
-                    icon.classList.add("bi-heart");
-                }
-                if (icon.classList.contains("bi-bookmark")) {
-                    icon.classList.remove("bi-bookmark");
-                    icon.classList.add("bi-bookmark-fill");
-                } else if (icon.classList.contains("bi-bookmark-fill")) {
-                    icon.classList.remove("bi-bookmark-fill");
-                    icon.classList.add("bi-bookmark");
-                }
-            });
-        });
+		priceInput.addEventListener('input', () => {
+			let val = parseInt(priceInput.value) || 0;
+			if (val < 0) val = 0;
+			if (val > 300) val = 300;
+			priceInput.value = val;
+			priceSlider.value = val;
+		});
 
-        // --- ★★★ NUEVA LÓGICA PARA FILTRAR RECETAS ★★★ ---
-        const searchButton = document.getElementById("btn-buscar-recetas");
-        const allRecipeCards = document.querySelectorAll("#resultados-busqueda .col[data-ingredients]");
-        const noResultsMessage = document.getElementById("no-results-message");
+		async function loadIngredients() {
+			try {
+				const res = await fetch(API_INGREDIENTS);
+				if (!res.ok) throw new Error('No se pudo cargar ingredientes');
+				const list = await res.json();
+				ingredientsList.innerHTML = '';
+				list.forEach(ing => {
+					const id = ing.id;
+					const name = ing.nombre;
+					const div = document.createElement('div');
+					div.className = 'form-check';
+					const cb = document.createElement('input');
+					cb.type = 'checkbox'; cb.className = 'form-check-input ingredient-check'; cb.id = 'ing-' + id; cb.dataset.id = id;
+					const label = document.createElement('label'); label.className = 'form-check-label ms-2'; label.htmlFor = cb.id; label.textContent = name;
+					div.appendChild(cb); div.appendChild(label);
+					ingredientsList.appendChild(div);
+				});
+			} catch (err) {
+				console.error(err);
+				ingredientsList.innerHTML = '<p class="text-muted">No se pudieron cargar ingredientes.</p>';
+			}
+		}
 
-        searchButton.addEventListener("click", function () {
-            // 1. Obtener la lista de ingredientes seleccionados
-            const selectedPills = listaIngredientes.querySelectorAll("span.badge");
-            const selectedIngredients = Array.from(selectedPills).map(
-                (pill) => pill.dataset.ingredient
-            );
+		function getSelectedIngredientIds() {
+			const checks = document.querySelectorAll('.ingredient-check:checked');
+			return Array.from(checks).map(c => parseInt(c.dataset.id));
+		}
 
-            // Si no hay nada seleccionado, mostrar todo y salir
-            if (selectedIngredients.length === 0) {
-                allRecipeCards.forEach((card) => {
-                    card.style.display = "block"; // 'block' para mostrar la columna
-                });
-                noResultsMessage.style.display = "none";
-                return;
-            }
+		async function doSearch(e) {
+			if (e) e.preventDefault();
+			resultsEl.innerHTML = '';
+			noResults.style.display = 'none';
 
-            let matchesFound = 0;
+			const nombre = nameInput.value.trim();
+			const maxPrecio = parseInt(priceInput.value) || 300;
+			const ingredientes = getSelectedIngredientIds();
 
-            // 2. Recorrer cada tarjeta de receta
-            allRecipeCards.forEach((card) => {
-                const cardIngredientsAttr = card.dataset.ingredients;
-                if (!cardIngredientsAttr) {
-                    card.style.display = "none"; // Ocultar si no tiene ingredientes
-                    return;
-                }
+			const params = new URLSearchParams();
+			if (nombre) params.append('nombre', nombre);
+			if (maxPrecio !== undefined) params.append('maxPrecio', maxPrecio);
+			ingredientes.forEach(id => params.append('ingredienteId', id));
 
-                const cardIngredients = cardIngredientsAttr.split(",");
+			try {
+				const res = await fetch(`${API_RECIPES}/buscar?${params.toString()}`);
+				if (!res.ok) throw new Error('Error en búsqueda');
+				const recipes = await res.json();
+				if (!recipes || recipes.length === 0) {
+					noResults.style.display = 'block';
+					return;
+				}
 
-                // 3. Comprobar si la tarjeta TIENE TODOS los ingredientes seleccionados
-                const isMatch = selectedIngredients.every((selected) =>
-                    cardIngredients.includes(selected)
-                );
+				recipes.forEach(r => {
+					const col = document.createElement('div'); col.className = 'col';
+					const card = document.createElement('div'); card.className = 'card h-100';
+					const img = document.createElement('img'); img.className = 'card-img-top'; img.style.height = '180px'; img.style.objectFit = 'cover'; img.src = r.imagenUrl || '/assets/recetas/default.jpg'; img.alt = r.nombre || '';
+					const bd = document.createElement('div'); bd.className = 'card-body';
+					const h5 = document.createElement('h5'); h5.className = 'card-title'; h5.textContent = r.nombre || '';
+					const p = document.createElement('p'); p.className = 'card-text'; p.textContent = r.descripcion || '';
+					bd.appendChild(h5); bd.appendChild(p);
+					const ff = document.createElement('div'); ff.className = 'card-footer bg-white border-0';
+					const btn = document.createElement('button'); btn.className = 'btn btn-sm btn-success w-100'; btn.textContent = 'Ver Receta'; btn.addEventListener('click', () => showDetail(r.id));
+					ff.appendChild(btn);
+					card.appendChild(img); card.appendChild(bd); card.appendChild(ff); col.appendChild(card); resultsEl.appendChild(col);
+				});
+			} catch (err) {
+				console.error(err);
+				noResults.style.display = 'block';
+				noResults.textContent = 'Error al realizar la búsqueda.';
+			}
+		}
 
-                // 4. Mostrar u ocultar la tarjeta
-                if (isMatch) {
-                    card.style.display = "block";
-                    matchesFound++;
-                } else {
-                    card.style.display = "none";
-                }
-            });
+		function showDetail(id) {
+			fetch(`${API_RECIPES}/${id}`).then(r => r.json()).then(data => {
+				alert((data.nombre || 'Receta') + '\n\n' + (data.instrucciones || 'Sin instrucciones'));
+			}).catch(err => console.error(err));
+		}
 
-            // 5. Mostrar el mensaje "Sin resultados" si es necesario
-            if (matchesFound === 0) {
-                noResultsMessage.style.display = "block";
-            } else {
-                noResultsMessage.style.display = "none";
-            }
-        });
+		clearBtn.addEventListener('click', () => {
+			nameInput.value = '';
+			priceSlider.value = 300;
+			priceInput.value = 300;
+			document.querySelectorAll('.ingredient-check').forEach(cb => cb.checked = false);
+			resultsEl.innerHTML = '';
+			noResults.style.display = 'none';
+		});
 
-        // Script para el año en el footer
-        const yearSpan = document.getElementById("year");
-        if (yearSpan) {
-            yearSpan.textContent = new Date().getFullYear();
-        }
-    });
+		form.addEventListener('submit', doSearch);
+		loadIngredients();
+	});
 </script>
 
+</body>
 </html>
+
