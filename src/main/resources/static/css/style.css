@@ -1,41 +1,327 @@
-/*Estilo contenedor del perfil*/
-.contenedor-perfil {
-  display: flex;
-  justify-content: center;
-  width: 425px;
-  height: 592px;
+/* ================= VARIABLES CSS ================= */
+:root {
+  --primary-color: #198754;
+  --primary-dark: #145c32;
+  --primary-light: #20c997;
+  --secondary-color: #6c757d;
+  --success-color: #198754;
+  --danger-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #0dcaf0;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --white: #ffffff;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
 }
 
-/*tamaño del tab*/
-.tab-content {
-  height: 550px;
-  overflow-y: auto;
+/* ================= ESTILOS GLOBALES ================= */
+* {
+  box-sizing: border-box;
 }
 
-/*color tab normal*/
-.nav-tabs .nav-link {
-  color: #198754;
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--dark-color);
+  background-color: var(--light-color);
 }
 
-/*color tab activo*/
-.nav-tabs .nav-link.active {
-  color: #198754;
-  font-weight: bold;
-  border-color: #198754 #198754 #fff;
+/* ================= HEADER Y NAVEGACIÓN ================= */
+.navbar-brand img {
+  transition: var(--transition);
 }
 
-/*Color de los tabs al pasar el cursor*/
-.nav-tabs .nav-link:hover {
-  color: #145c32;
+.navbar-brand:hover img {
+  transform: scale(1.05);
 }
 
-/*
-idea quizas se use despues xd
+.nav-link {
+  transition: var(--transition);
+  position: relative;
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: var(--white);
+  transition: var(--transition);
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 80%;
+}
+
+/* ================= BOTONES ================= */
+.btn {
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border: none;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+}
+
+.btn-outline-success {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-outline-success:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--white);
+}
+
+/* ================= CARDS ================= */
 .card {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  overflow: hidden;
 }
 
 .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-img-top {
+  transition: var(--transition);
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+/* ================= CARRUSEL ================= */
+.carousel-item img {
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+  transition: var(--transition);
+}
+
+.carousel-control-prev:hover,
+.carousel-control-next:hover {
+  opacity: 0.8;
+}
+
+/* ================= PERFIL ================= */
+.contenedor-perfil {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 425px;
+  margin: 0 auto;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, var(--white), var(--light-color));
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.profile-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-}*/
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= TABS ================= */
+.tab-content {
+  height: auto;
+  min-height: 400px;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.nav-tabs {
+  border-bottom: 2px solid var(--light-color);
+}
+
+.nav-tabs .nav-link {
+  color: var(--primary-color);
+  border: none;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--primary-dark);
+  background-color: var(--light-color);
+  border-color: transparent;
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border-color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* ================= FORMULARIOS ================= */
+.form-control {
+  border-radius: var(--border-radius);
+  border: 2px solid #e9ecef;
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.form-select {
+  border-radius: var(--border-radius);
+  border: 2px solid #e9ecef;
+  transition: var(--transition);
+}
+
+.form-select:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+/* ================= ICONOS INTERACTIVOS ================= */
+.toggle-icon-btn {
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.toggle-icon-btn:hover {
+  transform: scale(1.1);
+  background-color: var(--white) !important;
+  box-shadow: var(--box-shadow);
+}
+
+/* ================= BADGES ================= */
+.badge {
+  border-radius: 20px;
+  padding: 0.5em 1em;
+  font-weight: 500;
+  transition: var(--transition);
+}
+
+.badge:hover {
+  transform: scale(1.05);
+}
+
+/* ================= FOOTER ================= */
+footer {
+  background: linear-gradient(135deg, var(--dark-color), #343a40) !important;
+}
+
+footer a {
+  transition: var(--transition);
+}
+
+footer a:hover {
+  color: var(--primary-light) !important;
+  transform: translateY(-2px);
+}
+
+footer .bi {
+  transition: var(--transition);
+}
+
+footer .bi:hover {
+  transform: scale(1.2);
+}
+
+/* ================= ANIMACIONES ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
+@media (max-width: 768px) {
+  .contenedor-perfil {
+    width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .tab-content {
+    min-height: 300px;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-control-prev,
+  .carousel-control-next {
+    width: 8%;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+  }
+  
+  .nav-tabs .nav-link {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+/* ================= UTILIDADES ================= */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.shadow-custom {
+  box-shadow: var(--box-shadow);
+}
+
+.border-radius-custom {
+  border-radius: var(--border-radius);
+}

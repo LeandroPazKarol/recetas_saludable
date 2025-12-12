@@ -1,0 +1,363 @@
+/* ================= VARIABLES CSS ================= */
+:root {
+  --primary-color: #198754;
+  --primary-dark: #145c32;
+  --primary-light: #20c997;
+  --secondary-color: #6c757d;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --white: #ffffff;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* ================= ESTILOS ESPECÍFICOS PARA BÚSQUEDA ================= */
+.search-container {
+  background: linear-gradient(135deg, var(--light-color), #e9ecef);
+  min-height: 100vh;
+  padding: 2rem 0;
+}
+
+/* ================= FORMULARIO DE BÚSQUEDA ================= */
+#search-form {
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border: none;
+}
+
+#search-form:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+/* ================= INPUTS Y CONTROLES ================= */
+.form-control, .form-range {
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.form-range::-webkit-slider-thumb {
+  background: var(--primary-color);
+  border-radius: 50%;
+  transition: var(--transition);
+}
+
+.form-range::-webkit-slider-thumb:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.form-range::-moz-range-thumb {
+  background: var(--primary-color);
+  border-radius: 50%;
+  border: none;
+  transition: var(--transition);
+}
+
+.form-range::-moz-range-thumb:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+/* ================= FILTROS DE INGREDIENTES ================= */
+#ingredients-list {
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+#ingredients-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#ingredients-list::-webkit-scrollbar-track {
+  background: var(--light-color);
+  border-radius: 3px;
+}
+
+#ingredients-list::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 3px;
+}
+
+#ingredients-list::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+.form-check {
+  padding: 0.5rem 0;
+  transition: var(--transition);
+  border-radius: var(--border-radius);
+  margin-bottom: 0.25rem;
+}
+
+.form-check:hover {
+  background-color: rgba(25, 135, 84, 0.05);
+  padding-left: 0.75rem;
+}
+
+.form-check-input {
+  margin-top: 0.25rem;
+}
+
+.form-check-input:checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.form-check-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+}
+
+.form-check-label {
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.form-check:hover .form-check-label {
+  color: var(--primary-color);
+}
+
+/* ================= RESULTADOS ================= */
+#results .card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  overflow: hidden;
+}
+
+#results .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+#results .card-img-top {
+  transition: var(--transition);
+  height: 180px;
+  object-fit: cover;
+}
+
+#results .card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+#results .card-body {
+  padding: 1.25rem;
+}
+
+#results .card-title {
+  color: var(--dark-color);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+#results .card-text {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+#results .card-footer {
+  background: transparent;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 1rem 1.25rem;
+}
+
+/* ================= BOTONES ================= */
+.btn {
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+  border: none;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+  box-shadow: 0 4px 15px rgba(25, 135, 84, 0.3);
+}
+
+.btn-outline-secondary {
+  border: 2px solid var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.btn-outline-secondary:hover {
+  background: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: var(--white);
+}
+
+/* ================= MENSAJE SIN RESULTADOS ================= */
+#no-results {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--secondary-color);
+  font-size: 1.1rem;
+  background: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+#no-results::before {
+  content: '🔍';
+  display: block;
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* ================= ANIMACIONES ================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* ================= RESPONSIVE DESIGN ================= */
+@media (max-width: 992px) {
+  .search-container {
+    padding: 1rem 0;
+  }
+  
+  #ingredients-list {
+    max-height: 40vh;
+  }
+}
+
+@media (max-width: 768px) {
+  #search-form {
+    margin-bottom: 2rem;
+  }
+  
+  .form-check {
+    padding: 0.75rem 0.5rem;
+  }
+  
+  #results .card-body {
+    padding: 1rem;
+  }
+  
+  .btn {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .search-container {
+    padding: 0.5rem 0;
+  }
+  
+  #search-form {
+    padding: 1.5rem;
+  }
+  
+  .form-control {
+    font-size: 0.9rem;
+  }
+  
+  #ingredients-list {
+    max-height: 35vh;
+  }
+  
+  .form-check {
+    padding: 0.5rem;
+  }
+  
+  .form-check-label {
+    font-size: 0.9rem;
+  }
+  
+  #results .card-title {
+    font-size: 1rem;
+  }
+  
+  #results .card-text {
+    font-size: 0.85rem;
+  }
+}
+
+/* ================= LOADING STATES ================= */
+.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--primary-color);
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ================= ACCESIBILIDAD ================= */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ================= FOCUS VISIBLE ================= */
+.btn:focus-visible,
+.form-control:focus-visible,
+.form-check-input:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
