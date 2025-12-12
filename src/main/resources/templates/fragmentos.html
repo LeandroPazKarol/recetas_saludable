@@ -6,7 +6,7 @@
 <body>
 
 <!-- ================= FRAGMENTO: HEADER ================= -->
-<header th:fragment="header" class="bg-success text-whitqe">
+<header th:fragment="header" class="navbar-primary text-white">
     <nav class="navbar navbar-expand-lg navbar-dark container">
         <!-- Logo -->
         <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
@@ -38,11 +38,10 @@
             <!-- Perfil y logout (solo si está autenticado) -->
             <div class="d-flex align-items-center ms-lg-3 mt-2 mt-lg-0" sec:authorize="isAuthenticated()">
                 <div class="dropdown">
-                    <a class="d-flex align-items-center text-white text-decoration-none" href="#" id="profileDropdown"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img th:src="@{/assets/usuario1.png}" class="rounded-circle"
-                             style="width: 40px; height: 40px;" alt="usuario">
-                    </a>
+                          <a class="d-flex align-items-center text-white text-decoration-none" href="#" id="profileDropdown"
+                              data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-person-circle" style="font-size: 1.75rem; line-height: 1; color: #ffffff;" aria-label="usuario"></i>
+                          </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                         <li><a class="dropdown-item" th:href="@{/usuario/perfil}">Mi Perfil</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -70,7 +69,7 @@
         <div class="row text-center text-md-start">
             <!-- Columna 1 -->
             <div class="col-md-4 mb-4">
-                <h5 class="fw-bold">Recetas al Alcance</h5>
+                <h5 class="fw-bold">Recetas Saludables</h5>
                 <p>Plataforma de recetas saludables y económicas.</p>
             </div>
 
@@ -87,9 +86,19 @@
             <!-- Columna 3 -->
             <div class="col-md-4 mb-4">
                 <h5 class="fw-bold">Síguenos</h5>
-                <a href="#" class="text-white fs-4 me-3"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-white fs-4 me-3"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-white fs-4"><i class="bi bi-twitter"></i></a>
+                <div class="social-links">
+
+
+                        <a href="#" class="text-white" title="Facebook"><i class="bi bi-facebook"></i></a>
+
+
+                        <a href="#" class="text-white" title="Instagram"><i class="bi bi-instagram"></i></a>
+
+
+                        <a href="#" class="text-white" title="Twitter"><i class="bi bi-twitter"></i></a>
+
+
+                    </div>
             </div>
         </div>
 
