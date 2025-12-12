@@ -36,12 +36,11 @@ public class Recipe {
     )
     private Set<Ingredient> ingredientes = new HashSet<>();
     
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private User autor;
-    
     private String imagenUrl;
     
     @Column(columnDefinition = "TEXT")
     private String instrucciones;
+    
+    @Column(name = "usuario_id", nullable = true)
+    private Long usuarioId; // ID del usuario que creó la receta (puede ser null)
 }

@@ -31,8 +31,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf
+                // Proyecto de prueba: ignorar CSRF para APIs
+                .ignoringRequestMatchers("/api/**")
+            )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/",
                                 "/login",
@@ -40,11 +44,17 @@ public class SecurityConfig {
                                 "/usuario/perfil",
                                 "/buscar",
                                 "/recetas",
+                                "/vista/**",
                                 "/usuario/guardarUsuario",
+                                "/api/ingredientes/**",
+                                "/api/recetas/buscar",
+                                "/api/recetas/**",
                                 "/assets/**",
                                 "/css/**",
                                 "/js/**")
                         .permitAll()
+                        .requestMatchers("/api/usuarios/favoritos/**")
+                        .authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

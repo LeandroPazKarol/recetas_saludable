@@ -18,6 +18,4 @@ public class Ingredient {
     private String nombre;
 
     private String descripcion;
-
-    private String unidad; // ej: gramos, mililitros, unidades
 }

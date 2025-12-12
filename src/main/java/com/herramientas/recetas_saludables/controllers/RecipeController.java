@@ -3,9 +3,13 @@ package com.herramientas.recetas_saludables.controllers;
 import com.herramientas.recetas_saludables.model.DificultadEnum;
 import com.herramientas.recetas_saludables.model.Ingredient;
 import com.herramientas.recetas_saludables.model.Recipe;
+import com.herramientas.recetas_saludables.model.User;
 import com.herramientas.recetas_saludables.services.IngredientService;
 import com.herramientas.recetas_saludables.services.RecipeService;
+import com.herramientas.recetas_saludables.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +25,9 @@ public class RecipeController {
     @Autowired
     private IngredientService ingredientService;
     
+    @Autowired
+    private UserService userService;
+    
     // Obtener todas las recetas
     @GetMapping
     public List<Recipe> getAllRecipes() {
@@ -35,7 +42,26 @@ public class RecipeController {
     
     // Crear receta
     @PostMapping
-    public Recipe createRecipe(@RequestBody Recipe recipe) {
+    public Recipe createRecipe(@RequestBody Recipe recipe, 
+                              @RequestParam(required = false) List<Long> ingredienteId,
+                              @AuthenticationPrincipal UserDetails userDetails) {
+        // Asignar ingredientes si se proporcionan
+        if (ingredienteId != null && !ingredienteId.isEmpty()) {
+            for (Long id : ingredienteId) {
+                Ingredient ing = ingredientService.getIngredientById(id).orElse(null);
+                if (ing != null) {
+                    recipe.getIngredientes().add(ing);
+                }
+            }
+        }
+        
+        // Si existe un usuario autenticado, asignar su ID a la receta
+        if (userDetails != null) {
+            User user = userService.obtenerPorCorreo(userDetails.getUsername());
+            if (user != null) {
+                recipe.setUsuarioId(user.getId());
+            }
+        }
         return recipeService.saveRecipe(recipe);
     }
     

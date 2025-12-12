@@ -12,182 +12,144 @@
 </head>
 
 <body>
- <!-- ================= HEADER ================= -->
- <header class="bg-success text-white">
-    <nav class="navbar navbar-expand-lg navbar-dark container">
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
-            <img th:src="@{/assets/logo.png}" alt="Logo Plataforma" class="me-2"
-                 style="width: 50px; height: 50px;" />
-            <span class="fw-bold h5 mb-0">Recetas al Alcance</span>
-        </a>
+<!-- Header -->
+<div th:replace="~{fragmentos :: header}"></div>
 
-        <!-- Botón hamburguesa -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<!-- Alertas -->
+<div th:if="${param.updated}" class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="bi bi-check-circle me-2"></i>Perfil actualizado correctamente
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
 
-        <!-- Menú -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/}">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/recetas}">Recetas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" th:href="@{/buscar}">Buscar</a>
-                </li>
-            </ul>
+<div th:if="${param['password-changed']}" class="alert alert-success alert-dismissible fade show">
+    <i class="bi bi-check-circle me-2"></i>Contraseña cambiada correctamente
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+</div>
 
-            <!-- Perfil y logout -->
-            <div class="d-flex align-items-center ms-lg-3 mt-2 mt-lg-0">
-                <!-- Icono de perfil simple -->
-                <div class="dropdown">
-                    <a class="d-flex align-items-center text-white text-decoration-none" href="#" id="profileDropdown"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        <img th:src="@{/assets/usuario1.png}" class="rounded-circle" style="width: 40px; height: 40px;" alt="usuario">
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-                        <li><a class="dropdown-item" th:href="@{/perfil}">Mi Perfil</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form th:action="@{/logout}" method="post">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                <button type="submit" class="dropdown-item">Cerrar sesión</button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
-</header>
-
-    <!-- Perfil de Usuario Mejorado -->
+<!-- Perfil de Usuario -->
 <main class="container my-5">
     <div class="row g-4">
 
-        <!-- Perfil Usuario -->
+        <!-- Tarjeta de Perfil -->
         <div class="col-md-4">
             <div class="card shadow-sm text-center p-3 profile-card">
-                <img th:src="@{/assets/usuario1.png}" 
-     class="mx-auto mb-3" style="width:120px; height:120px; border-radius:50%; object-fit:cover;" 
-     alt="Usuario público">
+                <img th:src="@{/assets/usuario1.png}"
+                     class="mx-auto mb-3"
+                     style="width:120px; height:120px; border-radius:50%; object-fit:cover;"
+                     alt="Foto de perfil">
 
-                <h4 class="fw-bold mb-1">Leandro Franco</h4>
-                <p class="text-muted mb-2">leandro@gmail.com</p>
-                
-                <span class="badge bg-secondary mb-3">Invitado</span>
+                <h4 class="fw-bold mb-1" th:text="${usuario.nombre + ' ' + usuario.apellido}">
+                    Nombre Usuario
+                </h4>
+                <p class="text-muted mb-2" th:text="${usuario.correo}">
+                    correo@ejemplo.com
+                </p>
+                <p class="text-muted mb-2">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <span th:text="${usuario.pais}">País</span>
+                </p>
+
+                <span class="badge bg-success mb-3">Usuario Activo</span>
 
                 <div>
-                    <a href="#" class="btn btn-primary btn-sm w-100">Editar perfil</a>
+                    <a href="#" class="btn btn-primary btn-sm w-100 mb-2"
+                       data-bs-toggle="modal" data-bs-target="#editarPerfilModal">
+                        <i class="bi bi-pencil-square me-1"></i>Editar perfil
+                    </a>
                 </div>
             </div>
         </div>
 
-        <!-- Contenido Perfil -->
+        <!-- Contenido del Perfil -->
         <div class="col-md-8">
-            <div class="card shadow-sm">
+            <div class="shadow-sm">
                 <div class="card-body">
                     <!-- Tabs -->
                     <ul class="nav nav-tabs mb-3" id="perfilTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab" data-bs-target="#info"
-                                    type="button" role="tab">Información</button>
+                            <button class="nav-link active" id="info-tab" data-bs-toggle="tab"
+                                    data-bs-target="#info" type="button" role="tab">
+                                Información
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="guardados-tab" data-bs-toggle="tab" data-bs-target="#guardados"
-                                    type="button" role="tab">Guardados</button>
+                            <button class="nav-link" id="Publicaciones-tab" data-bs-toggle="tab"
+                                    data-bs-target="#publicaciones" type="button" role="tab">
+                                Publicaciones
+                            </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="favoritos-tab" data-bs-toggle="tab" data-bs-target="#favoritos"
-                                    type="button" role="tab">Favoritos</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="preferencias-tab" data-bs-toggle="tab" data-bs-target="#preferencias"
-                                    type="button" role="tab">Preferencias</button>
+                            <button class="nav-link" id="favoritos-tab" data-bs-toggle="tab"
+                                    data-bs-target="#favoritos" type="button" role="tab">
+                                Favoritos
+                            </button>
                         </li>
                     </ul>
 
                     <!-- Tab Content -->
                     <div class="tab-content" id="perfilTabsContent">
 
-                        <!-- Información -->
+                        <!-- Información Personal -->
                         <div class="tab-pane fade show active" id="info" role="tabpanel">
                             <h5 class="mb-3">Datos personales</h5>
                             <dl class="row">
-                                <dt class="col-sm-4">Nombre</dt>
-                                <dd class="col-sm-8">Leandro Franco</dd>
+                                <dt class="col-sm-4">Nombre completo</dt>
+                                <dd class="col-sm-8" th:text="${usuario.nombre + ' ' + usuario.apellido}">
+                                    Nombre Apellido
+                                </dd>
+
+                                <dt class="col-sm-4">Correo electrónico</dt>
+                                <dd class="col-sm-8" th:text="${usuario.correo}">
+                                    correo@ejemplo.com
+                                </dd>
 
                                 <dt class="col-sm-4">Teléfono</dt>
-                                <dd class="col-sm-8">999000999</dd>
+                                <dd class="col-sm-8" th:text="${usuario.telefono ?: 'No especificado'}">
+                                    No especificado
+                                </dd>
 
-                                <dt class="col-sm-4">Email</dt>
-                                <dd class="col-sm-8">leandro@gmail.com</dd>
+                                <dt class="col-sm-4">País</dt>
+                                <dd class="col-sm-8" th:text="${usuario.pais}">
+                                    País
+                                </dd>
+
+                                <dt class="col-sm-4">Miembro desde</dt>
+                                <dd class="col-sm-8">
+                                    Diciembre 2025
+                                </dd>
                             </dl>
+
+                            <div class="mt-4">
+                                <button class="btn btn-outline-primary btn-sm me-2"
+                                        data-bs-toggle="modal" data-bs-target="#editarPerfilModal">
+                                    <i class="bi bi-pencil me-1"></i>Editar información
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm"
+                                        data-bs-toggle="modal" data-bs-target="#cambiarContrasenaModal">
+                                    <i class="bi bi-key me-1"></i>Cambiar contraseña
+                                </button>
+                            </div>
                         </div>
 
-                        <!-- Guardados -->
-                        <div class="tab-pane fade" id="guardados" role="tabpanel">
-                            <h5 class="mb-3">Recetas Guardadas</h5>
-                            <div class="row g-3">
-                                <div class="col-sm-6 col-md-4 col-lg-3">
-                                    <div class="card h-100">
-                                        <img src="../assets/plato1.jpg" class="card-img-top" alt="Receta">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Arroz Chaufa</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6 col-md-4 col-lg-3">
-                                    <div class="card h-100">
-                                        <img src="../assets/plato2.jpg" class="card-img-top" alt="Receta">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Batido de Plátano y Avena</h6>
-                                        </div>
-                                    </div>
-                                </div>
+                        <!-- Recetas Publicadas -->
+                        <div class="tab-pane fade" id="publicaciones" role="tabpanel">
+                            <h5 class="mb-3">Mis recetas</h5>
+                            <p class="text-muted mb-3">Crea tu propia receta y comparte con otros usuarios.</p>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRecetaModal">
+                                <i class="bi bi-plus-circle me-2"></i>Crear nueva receta
+                            </button>
+                            <div class="mt-4">
+                                <h6 class="mb-2">Recetas creadas</h6>
+                                <div id="mis-recetas-list" class="list-group"></div>
+                                <p id="mis-recetas-empty" class="text-muted mt-2" style="display:none">Aún no has creado recetas.</p>
                             </div>
                         </div>
 
                         <!-- Favoritos -->
                         <div class="tab-pane fade" id="favoritos" role="tabpanel">
                             <h5 class="mb-3">Recetas Favoritas</h5>
-                            <div class="row g-3">
-                                <div class="col-sm-6 col-md-4 col-lg-3">
-                                    <div class="card h-100 border-danger">
-                                        <img src="../assets/plato2.jpg" class="card-img-top" alt="Receta favorita">
-                                        <div class="card-body">
-                                            <h6 class="card-title">Mini Pizzas de Pan de Molde</h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Preferencias -->
-                        <div class="tab-pane fade" id="preferencias" role="tabpanel">
-                            <h5 class="mb-3">Preferencias</h5>
-                            <form>
-                                <div class="mb-3">
-                                    <label for="tema" class="form-label">Tema</label>
-                                    <select class="form-select" id="tema">
-                                        <option selected>Claro</option>
-                                        <option>Oscuro</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="idioma" class="form-label">Idioma</label>
-                                    <select class="form-select" id="idioma">
-                                        <option selected>Español</option>
-                                        <option>Inglés</option>
-                                    </select>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
-                            </form>
+                            <div id="favoritos-grid" class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3"></div>
+                            <p id="favoritos-empty" class="text-muted mt-3" style="display:none">Aún no tienes recetas favoritas.</p>
                         </div>
 
                     </div>
@@ -198,51 +160,484 @@
     </div>
 </main>
 
-
-
-<!-- ================= FOOTER ================= -->
-    <footer class="bg-dark text-white pt-5 pb-3 mt-5">
-        <div class="container">
-
-            <div class="row text-center text-md-start">
-
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Recetas al Alcance</h5>
-                    <p>Plataforma de recetas saludables y económicas.</p>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Enlaces</h5>
-                    <ul class="list-unstyled">
-                        <li><a th:href="@{/}" class="text-white text-decoration-none">Inicio</a></li>
-                        <li><a th:href="@{/recetas}" class="text-white text-decoration-none">Recetas</a></li>
-                        <li><a th:href="@{/buscar}" class="text-white text-decoration-none">Buscar por Ingredientes</a></li>
-                        <li><a th:href="@{/ideas}" class="text-white text-decoration-none">Ideas</a></li>
-                        <li><a th:href="@{/contacto}" class="text-white text-decoration-none">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold">Síguenos</h5>
-                    <a href="#" class="text-white fs-4 me-3"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="text-white fs-4 me-3"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="text-white fs-4"><i class="bi bi-twitter"></i></a>
-                </div>
+<!-- Modal: Editar Perfil -->
+<div class="modal fade" id="editarPerfilModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Perfil</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+            <form th:action="@{/usuario/actualizar}" method="post">
+                <div class="modal-body">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-            <hr class="border-light">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre"
+                               th:value="${usuario.nombre}" required>
+                    </div>
 
-            <div class="text-center">
-                <p class="mb-0">
-                    <span id="year"></span> Recetas al Alcance.
-                </p>
-            </div>
+                    <div class="mb-3">
+                        <label for="apellido" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" id="apellido" name="apellido"
+                               th:value="${usuario.apellido}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Teléfono</label>
+                        <input type="tel" class="form-control" id="telefono" name="telefono"
+                               th:value="${usuario.telefono}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pais" class="form-label">País</label>
+                        <select class="form-select" id="pais" name="pais" required>
+                            <option th:selected="${usuario.pais == 'Perú'}" value="Perú">Perú</option>
+                            <option th:selected="${usuario.pais == 'Argentina'}" value="Argentina">Argentina</option>
+                            <option th:selected="${usuario.pais == 'Chile'}" value="Chile">Chile</option>
+                            <option th:selected="${usuario.pais == 'Colombia'}" value="Colombia">Colombia</option>
+                            <option th:selected="${usuario.pais == 'México'}" value="México">México</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Guardar cambios
+                    </button>
+                </div>
+            </form>
         </div>
-    </footer>
+    </div>
+</div>
 
+<!-- Modal: Cambiar Contraseña -->
+<div class="modal fade" id="cambiarContrasenaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Cambiar Contraseña</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/usuario/cambiar-contrasena}" method="post">
+                <div class="modal-body">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
-<!-- Bootstrap JS  -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+                    <div class="mb-3">
+                        <label for="contrasenaActual" class="form-label">Contraseña actual</label>
+                        <input type="password" class="form-control" id="contrasenaActual"
+                               name="contrasenaActual" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="contrasenaNueva" class="form-label">Nueva contraseña</label>
+                        <input type="password" class="form-control" id="contrasenaNueva"
+                               name="contrasenaNueva" required minlength="8">
+                        <small class="text-muted">Mínimo 8 caracteres</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmarContrasena" class="form-label">Confirmar nueva contraseña</label>
+                        <input type="password" class="form-control" id="confirmarContrasena"
+                               name="confirmarContrasena" required minlength="8">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Cambiar contraseña
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Crear Receta -->
+<div class="modal fade" id="crearRecetaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nueva Receta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="crear-receta-form">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="receta-nombre" class="form-label">Nombre de la receta <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="receta-nombre" name="nombre" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="receta-descripcion" name="descripcion" rows="3"  required>Una platillo delicioso, saludable y rica en proteínas.</textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="receta-tiempo" class="form-label">Tiempo de preparación (min) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="receta-tiempo" name="tiempoPreparacion" min="1" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="receta-precio" class="form-label">Precio (S/) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="receta-precio" name="precio" min="0" step="1" value="25" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-dificultad" class="form-label">Dificultad <span class="text-danger">*</span></label>
+                        <select class="form-select" id="receta-dificultad" name="dificultad" required>
+                            <option value="">-</option>
+                            <option value="FACIL">Fácil</option>
+                            <option value="MEDIA">Media</option>
+                            <option value="DIFICIL">Difícil</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-imagen" class="form-label">URL de la imagen <span class="text-danger">*</span></label>
+                        <input type="url" class="form-control" id="receta-imagen" name="imagenUrl" value="https://img.bestrecipes.com.au/E_PsO3f5/w643-h428-cfill-q90/br/2019/01/healthy-mexican-bowl-recipe-522877-1.jpg" required>
+                        <small class="text-muted">Ingresa la URL completa de la imagen (http:// o https://)</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-instrucciones" class="form-label">Instrucciones <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="receta-instrucciones" name="instrucciones" rows="4" required>1. Lavar y picar los vegetales
+2. Cocinar la quinoa según las instrucciones
+3. Mezclar todos los ingredientes
+4. Agregar aderezo al gusto y servir</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-ingredientes-search" class="form-label">Ingredientes <span class="text-danger">*</span></label>
+                        <div class="position-relative">
+                            <input type="text" class="form-control" id="receta-ingredientes-search" placeholder="Busca y selecciona ingredientes...">
+                            <div id="receta-ingredientes-dropdown" class="position-absolute w-100 bg-white border rounded shadow-sm mt-1" style="display:none; max-height:250px; overflow-y:auto; z-index:1000;"></div>
+                        </div>
+                        <div id="receta-ingredientes-tags" class="mt-2 d-flex flex-wrap gap-2"></div>
+                        <small class="text-muted d-block mt-2">Selecciona al menos un ingrediente</small>
+                    </div>
+
+                    <!-- Campo oculto para almacenar los IDs de ingredientes seleccionados -->
+                    <input type="hidden" id="receta-ingredientes-ids" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-2"></i>Crear receta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragmentos :: footer}"></div>
+<!-- Scripts -->
+<div th:replace="~{fragmentos :: scripts}"></div>
+
+<!-- Script para validar contraseñas -->
+<script>
+    document.querySelector('#cambiarContrasenaModal form').addEventListener('submit', function(e) {
+        const nueva = document.getElementById('contrasenaNueva').value;
+        const confirmar = document.getElementById('confirmarContrasena').value;
+
+        if (nueva !== confirmar) {
+            e.preventDefault();
+            alert('Las contraseñas no coinciden');
+        }
+    });
+
+    // Cargar favoritos (tarjetas pequeñas: solo imagen y nombre)
+    document.addEventListener('DOMContentLoaded', () => {
+        const favTabBtn = document.getElementById('favoritos-tab');
+        const grid = document.getElementById('favoritos-grid');
+        const emptyMsg = document.getElementById('favoritos-empty');
+
+        async function loadFavoritos() {
+            grid.innerHTML = '';
+            emptyMsg.style.display = 'none';
+            try {
+                const resIds = await fetch('/api/usuarios/favoritos');
+                if (!resIds.ok) throw new Error('No autenticado o error al obtener favoritos');
+                const ids = await resIds.json();
+                if (!ids || ids.length === 0) {
+                    emptyMsg.style.display = 'block';
+                    return;
+                }
+
+                // Obtener cada receta por id
+                const recipes = await Promise.all(ids.map(async (id) => {
+                    try {
+                        const r = await fetch(`/api/recetas/${id}`);
+                        if (!r.ok) return null;
+                        return await r.json();
+                    } catch { return null; }
+                }));
+
+                const filtered = recipes.filter(r => !!r);
+                if (filtered.length === 0) {
+                    emptyMsg.style.display = 'block';
+                    return;
+                }
+
+                filtered.forEach(r => {
+                    const col = document.createElement('div'); col.className = 'col';
+                    const card = document.createElement('div'); card.className = 'card h-100 shadow-sm';
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => { window.location.href = `/vista/${r.id}`; });
+
+                    const img = document.createElement('img'); img.className = 'card-img-top';
+                    img.style.height = '140px'; img.style.objectFit = 'cover';
+                    img.src = r.imagenUrl || '/assets/recetas/default.jpg'; img.alt = r.nombre || '';
+
+                    const body = document.createElement('div'); body.className = 'card-body p-2';
+                    const title = document.createElement('p'); title.className = 'card-text fw-semibold mb-0 text-truncate';
+                    title.textContent = r.nombre || '';
+                    body.appendChild(title);
+
+                    card.appendChild(img);
+                    card.appendChild(body);
+                    col.appendChild(card);
+                    grid.appendChild(col);
+                });
+            } catch (err) {
+                console.error(err);
+                emptyMsg.style.display = 'block';
+                emptyMsg.textContent = 'No se pudieron cargar tus favoritos.';
+            }
+        }
+
+        // Cargar cuando se abra la pestaña de favoritos
+        favTabBtn.addEventListener('shown.bs.tab', loadFavoritos);
+        // También cargar inicialmente si la pestaña ya está activa por URL
+        if (document.getElementById('favoritos').classList.contains('show')) {
+            loadFavoritos();
+        }
+
+        // Manejar creación de receta
+        const recetaForm = document.getElementById('crear-receta-form');
+        const recetaModal = document.getElementById('crearRecetaModal');
+        const ingredientesSearch = document.getElementById('receta-ingredientes-search');
+        const ingredientesDropdown = document.getElementById('receta-ingredientes-dropdown');
+        const ingredientesTags = document.getElementById('receta-ingredientes-tags');
+        const ingredientesIds = document.getElementById('receta-ingredientes-ids');
+        
+        let allIngredientes = [];
+        let selectedIngredientes = new Map(); // Map de id -> {id, nombre}
+
+        // Cargar todos los ingredientes al abrir el modal
+        document.getElementById('crearRecetaModal').addEventListener('show.bs.modal', async () => {
+            try {
+                const res = await fetch('/api/ingredientes');
+                if (res.ok) {
+                    allIngredientes = await res.json();
+                }
+            } catch (err) {
+                console.error('Error cargando ingredientes:', err);
+            }
+        });
+
+        // Búsqueda de ingredientes
+        ingredientesSearch.addEventListener('input', async (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            ingredientesDropdown.innerHTML = '';
+
+            if (query.length === 0) {
+                ingredientesDropdown.style.display = 'none';
+                return;
+            }
+
+            const filtered = allIngredientes.filter(ing => 
+                ing.nombre.toLowerCase().includes(query) && !selectedIngredientes.has(ing.id)
+            );
+
+            if (filtered.length === 0) {
+                ingredientesDropdown.innerHTML = '<div class="p-2 text-muted">No se encontraron ingredientes</div>';
+                ingredientesDropdown.style.display = 'block';
+                return;
+            }
+
+            filtered.slice(0, 8).forEach(ing => {
+                const div = document.createElement('div');
+                div.className = 'p-2 border-bottom cursor-pointer hover-light';
+                div.style.cursor = 'pointer';
+                div.textContent = ing.nombre;
+                div.addEventListener('click', () => selectIngrediente(ing));
+                ingredientesDropdown.appendChild(div);
+            });
+
+            ingredientesDropdown.style.display = 'block';
+        });
+
+        // Cerrar dropdown al hacer click fuera
+        document.addEventListener('click', (e) => {
+            if (!ingredientesSearch.contains(e.target) && !ingredientesDropdown.contains(e.target)) {
+                ingredientesDropdown.style.display = 'none';
+            }
+        });
+
+        function selectIngrediente(ing) {
+            selectedIngredientes.set(ing.id, { id: ing.id, nombre: ing.nombre });
+            ingredientesSearch.value = '';
+            ingredientesDropdown.style.display = 'none';
+            updateIngredientesTags();
+        }
+
+        function removeIngrediente(id) {
+            selectedIngredientes.delete(id);
+            updateIngredientesTags();
+        }
+
+        function updateIngredientesTags() {
+            ingredientesTags.innerHTML = '';
+            const ids = Array.from(selectedIngredientes.keys());
+            ingredientesIds.value = ids.join(',');
+
+            selectedIngredientes.forEach((ing, id) => {
+                const tag = document.createElement('span');
+                tag.className = 'badge bg-success';
+                tag.innerHTML = `${ing.nombre} <i class="bi bi-x-circle ms-1" style="cursor:pointer;"></i>`;
+                tag.querySelector('i').addEventListener('click', () => removeIngrediente(id));
+                ingredientesTags.appendChild(tag);
+            });
+        }
+        
+        recetaForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (selectedIngredientes.size === 0) {
+                alert('Por favor selecciona al menos un ingrediente');
+                return;
+            }
+            
+            const formData = {
+                nombre: document.getElementById('receta-nombre').value,
+                descripcion: document.getElementById('receta-descripcion').value,
+                tiempoPreparacion: parseInt(document.getElementById('receta-tiempo').value),
+                precio: parseFloat(document.getElementById('receta-precio').value),
+                dificultad: document.getElementById('receta-dificultad').value,
+                imagenUrl: document.getElementById('receta-imagen').value,
+                instrucciones: document.getElementById('receta-instrucciones').value
+            };
+
+            try {
+                // Construir URL con los IDs de ingredientes como parámetros
+                const ingredientIds = Array.from(selectedIngredientes.keys());
+                const params = new URLSearchParams();
+                ingredientIds.forEach(id => params.append('ingredienteId', id));
+                
+                const res = await fetch(`/api/recetas?${params.toString()}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (res.ok) {
+                    alert('¡Receta creada exitosamente!');
+                    recetaForm.reset();
+                    selectedIngredientes.clear();
+                    updateIngredientesTags();
+                    const modal = bootstrap.Modal.getInstance(recetaModal);
+                    modal.hide();
+                    // Refrescar lista de recetas del usuario
+                    loadMisRecetas();
+                } else {
+                    const error = await res.text();
+                    alert('Error al crear la receta: ' + error);
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('Error al crear la receta. Por favor intenta de nuevo.');
+            }
+        });
+
+        // Listar recetas del usuario en Publicaciones
+        const misRecetasList = document.getElementById('mis-recetas-list');
+        const misRecetasEmpty = document.getElementById('mis-recetas-empty');
+
+        async function loadMisRecetas() {
+            misRecetasList.innerHTML = '';
+            misRecetasEmpty.style.display = 'none';
+            try {
+                const meRes = await fetch('/api/usuarios/me');
+                if (!meRes.ok) { throw new Error('No autenticado'); }
+                const me = await meRes.json();
+                const userId = me.id;
+
+                const recRes = await fetch('/api/recetas');
+                if (!recRes.ok) { throw new Error('Error al cargar recetas'); }
+                const recetas = await recRes.json();
+                const mias = recetas.filter(r => r.usuarioId === userId);
+
+                if (mias.length === 0) {
+                    misRecetasEmpty.style.display = 'block';
+                    return;
+                }
+
+                mias.forEach(r => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                    const name = document.createElement('span');
+                    name.textContent = r.nombre || '';
+
+                    const actions = document.createElement('div');
+                    actions.className = 'btn-group';
+
+                    const verBtn = document.createElement('a');
+                    verBtn.className = 'btn btn-sm btn-outline-primary';
+                    verBtn.href = `/vista/${r.id}`;
+                    verBtn.textContent = 'Ver';
+
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'btn btn-sm btn-outline-danger';
+                    delBtn.textContent = 'Eliminar';
+                    delBtn.addEventListener('click', async () => {
+                        if (!confirm('¿Eliminar esta receta?')) return;
+                        try {
+                            const res = await fetch(`/api/recetas/${r.id}`, { method: 'DELETE' });
+                            if (res.ok) {
+                                loadMisRecetas();
+                            } else {
+                                alert('No se pudo eliminar la receta');
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            alert('Error al eliminar la receta');
+                        }
+                    });
+
+                    actions.appendChild(verBtn);
+                    actions.appendChild(delBtn);
+                    item.appendChild(name);
+                    item.appendChild(actions);
+                    misRecetasList.appendChild(item);
+                });
+            } catch (err) {
+                console.error(err);
+                misRecetasEmpty.style.display = 'block';
+            }
+        }
+
+        // Cargar cuando se abra la pestaña de publicaciones
+        const publicacionesTabBtn = document.getElementById('Publicaciones-tab');
+        publicacionesTabBtn.addEventListener('shown.bs.tab', loadMisRecetas);
+        if (document.getElementById('publicaciones').classList.contains('show')) {
+            loadMisRecetas();
+        }
+    });
+</script>
 
 </body>
 
