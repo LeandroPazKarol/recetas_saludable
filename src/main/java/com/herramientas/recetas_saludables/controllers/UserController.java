@@ -39,26 +39,88 @@ public class UserController {
         return "redirect:/login";
     }
 
+    //Obtener datos del usuario autenticado
     @GetMapping("/perfil")
-    public String perfil(@AuthenticationPrincipal UserDetails userDetails,
-            @RequestParam(required = false) String correo,
-            Model model) {
+    public String perfil(@AuthenticationPrincipal UserDetails userDetails, Model model) {
 
-        User usuario;
-
-        if (userDetails != null) {
-            // Usuario logueado
-            usuario = userService.obtenerPorCorreo(userDetails.getUsername());
-        } else if (correo != null) {
-            // Usuario público vía parámetro
-            usuario = userService.obtenerPorCorreo(correo);
-        } else {
-            // Ningún usuario, mostrar mensaje público
-            usuario = null;
+        if (userDetails == null) {
+            // Si no hay usuario autenticado, redirigir al login
+            return "redirect:/login";
         }
 
+        // Obtener el usuario actual por su correo (username)
+        User usuario = userService.obtenerPorCorreo(userDetails.getUsername());
+
+        if (usuario == null) {
+            // Si no se encuentra el usuario, redirigir al login
+            return "redirect:/login";
+        }
+
+        // Pasar el usuario al modelo
         model.addAttribute("usuario", usuario);
-        return "perfil"; // misma plantilla Thymeleaf
+
+        return "perfil";
+    }
+
+    //Actualizar datos del perfil
+    @PostMapping("/actualizar")
+    public String actualizarPerfil(@AuthenticationPrincipal UserDetails userDetails,
+                                   @RequestParam String nombre,
+                                   @RequestParam String apellido,
+                                   @RequestParam(required = false) String telefono,
+                                   @RequestParam String pais,
+                                   Model model) {
+
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        User usuario = userService.obtenerPorCorreo(userDetails.getUsername());
+
+        if (usuario != null) {
+            usuario.setNombre(nombre);
+            usuario.setApellido(apellido);
+            usuario.setTelefono(telefono);
+            usuario.setPais(pais);
+            userService.guardar(usuario);
+
+            model.addAttribute("success", "Perfil actualizado correctamente");
+        }
+
+        return "redirect:/usuario/perfil?updated=true";
+    }
+
+    //Cambiar contraseña
+    @PostMapping("/cambiar-contrasena")
+    public String cambiarContrasena(@AuthenticationPrincipal UserDetails userDetails,
+                                    @RequestParam String contrasenaActual,
+                                    @RequestParam String contrasenaNueva,
+                                    @RequestParam String confirmarContrasena,
+                                    Model model) {
+
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
+        // Verificar que las contraseñas nuevas coincidan
+        if (!contrasenaNueva.equals(confirmarContrasena)) {
+            return "redirect:/usuario/perfil?error=password-mismatch";
+        }
+
+        User usuario = userService.obtenerPorCorreo(userDetails.getUsername());
+
+        if (usuario != null) {
+            // Verificar la contraseña actual
+            if (!passwordEncoder.matches(contrasenaActual, usuario.getContrasena())) {
+                return "redirect:/usuario/perfil?error=wrong-password";
+            }
+
+            // Actualizar la contraseña
+            usuario.setContrasena(passwordEncoder.encode(contrasenaNueva));
+            userService.guardar(usuario);
+        }
+
+        return "redirect:/usuario/perfil?password-changed=true";
     }
 
 }
