@@ -40,4 +40,7 @@ public class Recipe {
     
     @Column(columnDefinition = "TEXT")
     private String instrucciones;
+    
+    @Column(name = "usuario_id", nullable = true)
+    private Long usuarioId; // ID del usuario que creó la receta (puede ser null)
 }

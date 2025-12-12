@@ -1,334 +1,125 @@
 <!DOCTYPE html>
-<ht lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recetas</title>
+    <title>Plataforma de Recetas Saludables y Económicas</title>
 
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 
-<b>
-    <!-- Header -->
+<body>
+<!-- Header -->
     <div th:replace="~{fragmentos :: header}"></div>
 
-  <!-- ================= MAIN ================= -->
-<main>
-  <section id="recipeCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-        aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#recipeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
-    <div class="carousel-inner" style="max-height: 500px">
-      <div class="carousel-item active">
-        <img th:src="@{/assets/recetas/lentejas.webp}" class="d-block w-100" alt="Ensalada fresca"
-          style="object-fit: cover; height: 500px" />
-        <div class="carousel-caption d-none d-md-block p-3" style="background-color: rgba(0, 0, 0, 0.5)">
-          <h5 class="fw-bold">Ensalada de Lentejas Energética</h5>
-          <p>
-            Perfecta para después de clases. Económica y te llena de energía.
-          </p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img th:src="@{/assets/recetas/avena.jpg}" class="d-block w-100" alt="Avena con frutas"
-          style="object-fit: cover; height: 500px" />
-        <div class="carousel-caption d-none d-md-block p-3" style="background-color: rgba(0, 0, 0, 0.5)">
-          <h5 class="fw-bold">Avena Rápida para tus Mañanas</h5>
-          <p>Desayuna en 5 minutos antes de salir a la universidad.</p>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img th:src="@{/assets/recetas/wraps.webp}" class="d-block w-100" alt="Wraps saludables"
-          style="object-fit: cover; height: 500px" />
-        <div class="carousel-caption d-none d-md-block p-3" style="background-color: rgba(0, 0, 0, 0.5)">
-          <h5 class="fw-bold">Wraps Fáciles para Llevar</h5>
-          <p>
-            Prepara tu almuerzo la noche anterior. ¡Fácil, barato y saludable!
-          </p>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#recipeCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#recipeCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-  </section>
+    <!-- ================= MAIN ================= -->
+    <main>
+            <section class="container my-4">
+                <div class="d-flex align-items-center mb-3">
+                    <h2 class="mb-0">Todas las recetas</h2>
+                    <span class="ms-3 text-muted" id="recipes-count"></span>
+                </div>
+                <div id="recipes-grid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4"></div>
+                <p id="recipes-empty" class="text-muted mt-3" style="display:none">No hay recetas para mostrar.</p>
+            </section>
+    </main>
+    <!-- Footer -->
+    <div th:replace="~{fragmentos :: footer}"></div>
+    <!-- Scripts -->
+    <div th:replace="~{fragmentos :: scripts}"></div>
 
-  <section class="container-fluid bg-light text-center p-5 my-5">
-    <div class="container">
-      <h2 class="fw-bold">¿Qué tienes en tu refri? 🧊</h2>
-      <p class="fs-5 text-muted">
-        No gastes de más. Usa lo que ya tienes y descubre recetas fáciles.
-      </p>
-      <a th:href="@{/buscar}" class="btn btn-success btn-lg shadow">
-        <i class="bi bi-search me-2"></i>Buscar por Ingredientes
-      </a>
-    </div>
-  </section>
+        <script>
+            const API_RECIPES = '/api/recetas';
 
-  <section class="container mt-5">
-    <h2 class="text-center fw-bold mb-4">
-      Recetas Fáciles para la Semana 🧑‍🍳
-    </h2>
-    <p class="text-center text-muted mb-4">
-      Come rico y saludable sin gastar de más. ¡Ideas perfectas para tu vida
-      universitaria!
-    </p>
+            document.addEventListener('DOMContentLoaded', () => {
+                loadAllRecipes();
+            });
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <div class="col">
-        <div class="card h-100 shadow-sm">
-          <div class="position-relative">
-            <img th:src="@{/assets/recetas/tostada.jpg}" class="card-img-top" alt="Tostadas con palta"
-              style="height: 250px; object-fit: cover" />
-            <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-              style="border-radius: 50%" title="Me Gusta">
-              <i class="bi bi-heart fs-5 text-danger"></i>
-            </a>
-            <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-              style="border-radius: 50%" title="Guardar Receta">
-              <i class="bi bi-bookmark fs-5 text-success"></i>
-            </a>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title fw-bold">Tostadas con Palta y Huevo</h5>
-            <p class="card-text">
-              Un desayuno completo y rápido para empezar el día con energía.
-            </p>
-            <div class="d-flex justify-content-around text-center my-3 border-top border-bottom py-2">
-              <div>
-                <i class="bi bi-clock fs-4 text-success"></i>
-                <div class="small fw-bold">10 min</div>
-              </div>
-              <div>
-                <i class="bi bi-piggy-bank-fill fs-4 text-success"></i>
-                <div class="small fw-bold">Económico</div>
-              </div>
-              <div>
-                <i class="bi bi-bar-chart-line fs-4 text-success"></i>
-                <div class="small fw-bold">Fácil</div>
-              </div>
-            </div>
-            <div>
-              <span class="badge bg-success">Saludable</span>
-              <span class="badge bg-warning text-dark">Rápido</span>
-              <span class="badge bg-info text-dark">Desayuno</span>
-            </div>
-          </div>
-          <div class="card-footer bg-white border-0 pb-3">
-            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-              data-bs-target="#modalTostadas">
-              Ver Receta
-            </button>
-          </div>
-        </div>
-      </div>
-<!--agregar mas tarjetas-->
-<section class="container mt-5">
-  <h2 class="text-center fw-bold mb-4">Recetas Fáciles para la Semana 🧑‍🍳</h2>
-  <p class="text-center text-muted mb-4">
-    Come rico y saludable sin gastar de más. ¡Ideas perfectas para tu vida universitaria!
-  </p>
+            async function loadAllRecipes() {
+                const grid = document.getElementById('recipes-grid');
+                const empty = document.getElementById('recipes-empty');
+                const countEl = document.getElementById('recipes-count');
+                grid.innerHTML = '';
+                empty.style.display = 'none';
 
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                try {
+                    const res = await fetch(API_RECIPES);
+                    if (!res.ok) throw new Error('No se pudo cargar recetas');
+                    const recipes = await res.json();
+                    countEl.textContent = recipes?.length ? `${recipes.length} recetas` : '';
 
-    <!-- Tostadas con Palta y Huevo -->
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-          <img th:src="@{/assets/recetas/tostada.jpg}" class="card-img-top" alt="Tostadas con palta"
-               style="height: 250px; object-fit: cover" />
-          <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-             style="border-radius: 50%" title="Me Gusta">
-            <i class="bi bi-heart fs-5 text-danger"></i>
-          </a>
-          <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-             style="border-radius: 50%" title="Guardar Receta">
-            <i class="bi bi-bookmark fs-5 text-success"></i>
-          </a>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title fw-bold">Tostadas con Palta y Huevo</h5>
-          <p class="card-text">Un desayuno completo y rápido para empezar el día con energía.</p>
-        </div>
-        <div class="card-footer bg-white border-0 pb-3">
-          <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                  data-bs-target="#modalTostadas">Ver Receta</button>
-        </div>
-      </div>
-    </div>
+                    if (!recipes || recipes.length === 0) {
+                        empty.style.display = 'block';
+                        return;
+                    }
 
-    <!-- Avena con Frutas -->
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-          <img th:src="@{/assets/recetas/avena.jpg}" class="card-img-top" alt="Avena con frutas"
-               style="height: 250px; object-fit: cover" />
-          <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-             style="border-radius: 50%" title="Me Gusta">
-            <i class="bi bi-heart fs-5 text-danger"></i>
-          </a>
-          <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-             style="border-radius: 50%" title="Guardar Receta">
-            <i class="bi bi-bookmark fs-5 text-success"></i>
-          </a>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title fw-bold">Avena con Frutas</h5>
-          <p class="card-text">Rápido y nutritivo desayuno para empezar la mañana.</p>
-        </div>
-        <div class="card-footer bg-white border-0 pb-3">
-          <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                  data-bs-target="#modalAvena">Ver Receta</button>
-        </div>
-      </div>
-    </div>
+                    recipes.forEach(r => {
+                        const col = document.createElement('div');
+                        col.className = 'col';
 
-    <!-- Wraps Saludables -->
-    <div class="col">
-      <div class="card h-100 shadow-sm">
-        <div class="position-relative">
-          <img th:src="@{/assets/recetas/wraps.webp}" class="card-img-top" alt="Wraps saludables"
-               style="height: 250px; object-fit: cover" />
-          <a href="#" class="btn btn-light position-absolute top-0 start-0 m-2 toggle-icon-btn"
-             style="border-radius: 50%" title="Me Gusta">
-            <i class="bi bi-heart fs-5 text-danger"></i>
-          </a>
-          <a href="#" class="btn btn-light position-absolute top-0 end-0 m-2 toggle-icon-btn"
-             style="border-radius: 50%" title="Guardar Receta">
-            <i class="bi bi-bookmark fs-5 text-success"></i>
-          </a>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title fw-bold">Wraps Saludables</h5>
-          <p class="card-text">Prepara tu almuerzo de forma rápida y práctica.</p>
-        </div>
-        <div class="card-footer bg-white border-0 pb-3">
-          <button type="button" class="btn btn-success w-100" data-bs-toggle="modal"
-                  data-bs-target="#modalWraps">Ver Receta</button>
-        </div>
-      </div>
-    </div>
+                        const card = document.createElement('div');
+                        card.className = 'card h-100 shadow-sm';
+                        card.style.cursor = 'pointer';
+                        card.addEventListener('click', () => {
+                            if (r.id) window.location.href = `/vista/${r.id}`;
+                        });
 
-  </div>
-</section>
+                        const img = document.createElement('img');
+                        img.className = 'card-img-top';
+                        img.style.height = '220px';
+                        img.style.objectFit = 'cover';
+                        img.src = r.imagenUrl || '/assets/recetas/default.jpg';
+                        img.alt = r.nombre || '';
 
-<!-- Modales -->
-<div class="modal fade" id="modalTostadas" tabindex="-1" aria-labelledby="modalTostadasLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalTostadasLabel">Tostadas con Palta y Huevo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <img th:src="@{/assets/recetas/tostada.jpg}" class="img-fluid rounded mb-3" alt="Tostadas con palta" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+                        const body = document.createElement('div');
+                        body.className = 'card-body';
 
-<div class="modal fade" id="modalAvena" tabindex="-1" aria-labelledby="modalAvenaLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalAvenaLabel">Avena con Frutas</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <img th:src="@{/assets/recetas/avena.jpg}" class="img-fluid rounded mb-3" alt="Avena con frutas" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+                        const title = document.createElement('h5');
+                        title.className = 'card-title';
+                        title.textContent = r.nombre || '';
 
-<div class="modal fade" id="modalWraps" tabindex="-1" aria-labelledby="modalWrapsLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalWrapsLabel">Wraps Saludables</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <img th:src="@{/assets/recetas/wraps.webp}" class="img-fluid rounded mb-3" alt="Wraps saludables" />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
+                        // Metadatos: tiempo y dificultad con íconos
+                        const meta = document.createElement('div');
+                        meta.className = 'd-flex gap-2 mb-2';
+                        const tiempo = document.createElement('span');
+                        tiempo.className = 'badge text-bg-light';
+                        tiempo.innerHTML = `<i class="bi bi-clock me-1"></i>${r.tiempoPreparacion ?? '—'} min`;
+                        const dificultad = document.createElement('span');
+                        dificultad.className = 'badge text-bg-light';
+                        dificultad.innerHTML = `<i class="bi bi-speedometer2 me-1"></i>${r.dificultad ?? '—'}`;
 
+                        const price = document.createElement('div');
+                        price.className = 'mb-2';
+                        price.innerHTML = `<span class="badge bg-success">Precio: S/ ${r.precio ?? '—'}</span>`;
 
-</main>
+                        const ingList = document.createElement('p');
+                        ingList.className = 'card-text text-muted';
+                        const ingredientes = (r.ingredientes || []).slice(0, 4).map(i => i.nombre).join(', ');
+                        ingList.textContent = ingredientes ? `Ingredientes: ${ingredientes}` : 'Ingredientes: —';
 
+                        body.appendChild(title);
+                        body.appendChild(meta);
+                        meta.appendChild(tiempo);
+                        meta.appendChild(dificultad);
+                        body.appendChild(price);
+                        body.appendChild(ingList);
 
-      <!-- Footer -->
-      <div th:replace="~{fragmentos :: footer}"></div>
-      <!-- Scripts -->
-      <div th:replace="~{fragmentos :: scripts}"></div>
-    <script>
-      // Espera a que todo el contenido de la página esté cargado
-      document.addEventListener("DOMContentLoaded", function () {
-        // Selecciona TODOS los botones que tienen la clase 'toggle-icon-btn'
-        const iconButtons = document.querySelectorAll(".toggle-icon-btn");
-
-        // Agrega un "oyente" de clic a cada botón encontrado
-        iconButtons.forEach((button) => {
-          button.addEventListener("click", function (event) {
-            // Previene que la página salte hacia arriba (comportamiento default del 'a href="#")
-            event.preventDefault();
-
-            // Encuentra el ícono <i> DENTRO del botón que fue clickeado
-            const icon = this.querySelector("i");
-
-            // Revisa si el ícono es un CORAZÓN
-            if (icon.classList.contains("bi-heart")) {
-              // Si es un corazón vacío, cámbialo a corazón relleno
-              icon.classList.remove("bi-heart");
-              icon.classList.add("bi-heart-fill");
-            } else if (icon.classList.contains("bi-heart-fill")) {
-              // Si es un corazón relleno, cámbialo a corazón vacío
-              icon.classList.remove("bi-heart-fill");
-              icon.classList.add("bi-heart");
+                        card.appendChild(img);
+                        card.appendChild(body);
+                        col.appendChild(card);
+                        grid.appendChild(col);
+                    });
+                } catch (err) {
+                    console.error(err);
+                    empty.style.display = 'block';
+                    empty.textContent = 'Error al cargar las recetas.';
+                }
             }
+        </script>
 
-            // Revisa si el ícono es un MARCADOR
-            if (icon.classList.contains("bi-bookmark")) {
-              // Si es un marcador vacío, cámbialo a marcador relleno
-              icon.classList.remove("bi-bookmark");
-              icon.classList.add("bi-bookmark-fill");
-            } else if (icon.classList.contains("bi-bookmark-fill")) {
-              // Si es un marcador relleno, cámbialo a marcador vacío
-              icon.classList.remove("bi-bookmark-fill");
-              icon.classList.add("bi-bookmark");
-            }
-          });
-        });
+</body>
 
-        // Script para el año en el footer (¡un bonus!)
-        const yearSpan = document.getElementById("year");
-        if (yearSpan) {
-          yearSpan.textContent = new Date().getFullYear();
-        }
-      });
-    </script>
-    </body>
-
-    </html>
+</html>

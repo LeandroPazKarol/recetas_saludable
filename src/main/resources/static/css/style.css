@@ -20,7 +20,6 @@
 /*color tab activo*/
 .nav-tabs .nav-link.active {
   color: #198754;
-  font-weight: bold;
   border-color: #198754 #198754 #fff;
 }
 

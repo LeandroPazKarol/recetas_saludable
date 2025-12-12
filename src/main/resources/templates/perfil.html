@@ -134,29 +134,22 @@
                         <!-- Recetas Publicadas -->
                         <div class="tab-pane fade" id="publicaciones" role="tabpanel">
                             <h5 class="mb-3">Mis recetas</h5>
-                            <div class="row g-3">
-                                <div class="col-12 text-center text-muted py-5">
-                                    <i class="bi bi-bookmark display-1 mb-3"></i>
-                                    <p>Aún no has publicado ninguna receta</p>
-                                    <a th:href="@{/recetas}" class="btn btn-success">
-                                        Explorar Recetas
-                                    </a>
-                                </div>
+                            <p class="text-muted mb-3">Crea tu propia receta y comparte con otros usuarios.</p>
+                            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearRecetaModal">
+                                <i class="bi bi-plus-circle me-2"></i>Crear nueva receta
+                            </button>
+                            <div class="mt-4">
+                                <h6 class="mb-2">Recetas creadas</h6>
+                                <div id="mis-recetas-list" class="list-group"></div>
+                                <p id="mis-recetas-empty" class="text-muted mt-2" style="display:none">Aún no has creado recetas.</p>
                             </div>
                         </div>
 
                         <!-- Favoritos -->
                         <div class="tab-pane fade" id="favoritos" role="tabpanel">
                             <h5 class="mb-3">Recetas Favoritas</h5>
-                            <div class="row g-3">
-                                <div class="col-12 text-center text-muted py-5">
-                                    <i class="bi bi-heart display-1 mb-3"></i>
-                                    <p>Aún no tienes recetas favoritas</p>
-                                    <a th:href="@{/recetas}" class="btn btn-success">
-                                        Descubrir Recetas
-                                    </a>
-                                </div>
-                            </div>
+                            <div id="favoritos-grid" class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3"></div>
+                            <p id="favoritos-empty" class="text-muted mt-3" style="display:none">Aún no tienes recetas favoritas.</p>
                         </div>
 
                     </div>
@@ -265,6 +258,84 @@
     </div>
 </div>
 
+<!-- Modal: Crear Receta -->
+<div class="modal fade" id="crearRecetaModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Crear Nueva Receta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="crear-receta-form">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="receta-nombre" class="form-label">Nombre de la receta <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="receta-nombre" name="nombre" placeholder="Ej: Ensalada de verduras" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-descripcion" class="form-label">Descripción <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="receta-descripcion" name="descripcion" rows="3" placeholder="Describe brevemente tu receta..." required></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="receta-tiempo" class="form-label">Tiempo de preparación (min) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="receta-tiempo" name="tiempoPreparacion" min="1" placeholder="30" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="receta-precio" class="form-label">Precio (S/) <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="receta-precio" name="precio" min="0" step="0.01" placeholder="25.50" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-dificultad" class="form-label">Dificultad <span class="text-danger">*</span></label>
+                        <select class="form-select" id="receta-dificultad" name="dificultad" required>
+                            <option value="">Selecciona una dificultad</option>
+                            <option value="FACIL">Fácil</option>
+                            <option value="MEDIA">Media</option>
+                            <option value="DIFICIL">Difícil</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-imagen" class="form-label">URL de la imagen <span class="text-danger">*</span></label>
+                        <input type="url" class="form-control" id="receta-imagen" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg" required>
+                        <small class="text-muted">Ingresa la URL completa de la imagen (http:// o https://)</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-instrucciones" class="form-label">Instrucciones <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="receta-instrucciones" name="instrucciones" rows="4" placeholder="Describe los pasos para preparar tu receta..." required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="receta-ingredientes-search" class="form-label">Ingredientes <span class="text-danger">*</span></label>
+                        <div class="position-relative">
+                            <input type="text" class="form-control" id="receta-ingredientes-search" placeholder="Busca y selecciona ingredientes...">
+                            <div id="receta-ingredientes-dropdown" class="position-absolute w-100 bg-white border rounded shadow-sm mt-1" style="display:none; max-height:250px; overflow-y:auto; z-index:1000;"></div>
+                        </div>
+                        <div id="receta-ingredientes-tags" class="mt-2 d-flex flex-wrap gap-2"></div>
+                        <small class="text-muted d-block mt-2">Selecciona al menos un ingrediente</small>
+                    </div>
+
+                    <!-- Campo oculto para almacenar los IDs de ingredientes seleccionados -->
+                    <input type="hidden" id="receta-ingredientes-ids" value="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle me-2"></i>Crear receta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Footer -->
 <div th:replace="~{fragmentos :: footer}"></div>
 <!-- Scripts -->
@@ -279,6 +350,288 @@
         if (nueva !== confirmar) {
             e.preventDefault();
             alert('Las contraseñas no coinciden');
+        }
+    });
+
+    // Cargar favoritos (tarjetas pequeñas: solo imagen y nombre)
+    document.addEventListener('DOMContentLoaded', () => {
+        const favTabBtn = document.getElementById('favoritos-tab');
+        const grid = document.getElementById('favoritos-grid');
+        const emptyMsg = document.getElementById('favoritos-empty');
+
+        async function loadFavoritos() {
+            grid.innerHTML = '';
+            emptyMsg.style.display = 'none';
+            try {
+                const resIds = await fetch('/api/usuarios/favoritos');
+                if (!resIds.ok) throw new Error('No autenticado o error al obtener favoritos');
+                const ids = await resIds.json();
+                if (!ids || ids.length === 0) {
+                    emptyMsg.style.display = 'block';
+                    return;
+                }
+
+                // Obtener cada receta por id
+                const recipes = await Promise.all(ids.map(async (id) => {
+                    try {
+                        const r = await fetch(`/api/recetas/${id}`);
+                        if (!r.ok) return null;
+                        return await r.json();
+                    } catch { return null; }
+                }));
+
+                const filtered = recipes.filter(r => !!r);
+                if (filtered.length === 0) {
+                    emptyMsg.style.display = 'block';
+                    return;
+                }
+
+                filtered.forEach(r => {
+                    const col = document.createElement('div'); col.className = 'col';
+                    const card = document.createElement('div'); card.className = 'card h-100 shadow-sm';
+                    card.style.cursor = 'pointer';
+                    card.addEventListener('click', () => { window.location.href = `/vista/${r.id}`; });
+
+                    const img = document.createElement('img'); img.className = 'card-img-top';
+                    img.style.height = '140px'; img.style.objectFit = 'cover';
+                    img.src = r.imagenUrl || '/assets/recetas/default.jpg'; img.alt = r.nombre || '';
+
+                    const body = document.createElement('div'); body.className = 'card-body p-2';
+                    const title = document.createElement('p'); title.className = 'card-text fw-semibold mb-0 text-truncate';
+                    title.textContent = r.nombre || '';
+                    body.appendChild(title);
+
+                    card.appendChild(img);
+                    card.appendChild(body);
+                    col.appendChild(card);
+                    grid.appendChild(col);
+                });
+            } catch (err) {
+                console.error(err);
+                emptyMsg.style.display = 'block';
+                emptyMsg.textContent = 'No se pudieron cargar tus favoritos.';
+            }
+        }
+
+        // Cargar cuando se abra la pestaña de favoritos
+        favTabBtn.addEventListener('shown.bs.tab', loadFavoritos);
+        // También cargar inicialmente si la pestaña ya está activa por URL
+        if (document.getElementById('favoritos').classList.contains('show')) {
+            loadFavoritos();
+        }
+
+        // Manejar creación de receta
+        const recetaForm = document.getElementById('crear-receta-form');
+        const recetaModal = document.getElementById('crearRecetaModal');
+        const ingredientesSearch = document.getElementById('receta-ingredientes-search');
+        const ingredientesDropdown = document.getElementById('receta-ingredientes-dropdown');
+        const ingredientesTags = document.getElementById('receta-ingredientes-tags');
+        const ingredientesIds = document.getElementById('receta-ingredientes-ids');
+        
+        let allIngredientes = [];
+        let selectedIngredientes = new Map(); // Map de id -> {id, nombre}
+
+        // Cargar todos los ingredientes al abrir el modal
+        document.getElementById('crearRecetaModal').addEventListener('show.bs.modal', async () => {
+            try {
+                const res = await fetch('/api/ingredientes');
+                if (res.ok) {
+                    allIngredientes = await res.json();
+                }
+            } catch (err) {
+                console.error('Error cargando ingredientes:', err);
+            }
+        });
+
+        // Búsqueda de ingredientes
+        ingredientesSearch.addEventListener('input', async (e) => {
+            const query = e.target.value.trim().toLowerCase();
+            ingredientesDropdown.innerHTML = '';
+
+            if (query.length === 0) {
+                ingredientesDropdown.style.display = 'none';
+                return;
+            }
+
+            const filtered = allIngredientes.filter(ing => 
+                ing.nombre.toLowerCase().includes(query) && !selectedIngredientes.has(ing.id)
+            );
+
+            if (filtered.length === 0) {
+                ingredientesDropdown.innerHTML = '<div class="p-2 text-muted">No se encontraron ingredientes</div>';
+                ingredientesDropdown.style.display = 'block';
+                return;
+            }
+
+            filtered.slice(0, 8).forEach(ing => {
+                const div = document.createElement('div');
+                div.className = 'p-2 border-bottom cursor-pointer hover-light';
+                div.style.cursor = 'pointer';
+                div.textContent = ing.nombre;
+                div.addEventListener('click', () => selectIngrediente(ing));
+                ingredientesDropdown.appendChild(div);
+            });
+
+            ingredientesDropdown.style.display = 'block';
+        });
+
+        // Cerrar dropdown al hacer click fuera
+        document.addEventListener('click', (e) => {
+            if (!ingredientesSearch.contains(e.target) && !ingredientesDropdown.contains(e.target)) {
+                ingredientesDropdown.style.display = 'none';
+            }
+        });
+
+        function selectIngrediente(ing) {
+            selectedIngredientes.set(ing.id, { id: ing.id, nombre: ing.nombre });
+            ingredientesSearch.value = '';
+            ingredientesDropdown.style.display = 'none';
+            updateIngredientesTags();
+        }
+
+        function removeIngrediente(id) {
+            selectedIngredientes.delete(id);
+            updateIngredientesTags();
+        }
+
+        function updateIngredientesTags() {
+            ingredientesTags.innerHTML = '';
+            const ids = Array.from(selectedIngredientes.keys());
+            ingredientesIds.value = ids.join(',');
+
+            selectedIngredientes.forEach((ing, id) => {
+                const tag = document.createElement('span');
+                tag.className = 'badge bg-success';
+                tag.innerHTML = `${ing.nombre} <i class="bi bi-x-circle ms-1" style="cursor:pointer;"></i>`;
+                tag.querySelector('i').addEventListener('click', () => removeIngrediente(id));
+                ingredientesTags.appendChild(tag);
+            });
+        }
+        
+        recetaForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (selectedIngredientes.size === 0) {
+                alert('Por favor selecciona al menos un ingrediente');
+                return;
+            }
+            
+            const formData = {
+                nombre: document.getElementById('receta-nombre').value,
+                descripcion: document.getElementById('receta-descripcion').value,
+                tiempoPreparacion: parseInt(document.getElementById('receta-tiempo').value),
+                precio: parseFloat(document.getElementById('receta-precio').value),
+                dificultad: document.getElementById('receta-dificultad').value,
+                imagenUrl: document.getElementById('receta-imagen').value,
+                instrucciones: document.getElementById('receta-instrucciones').value
+            };
+
+            try {
+                // Construir URL con los IDs de ingredientes como parámetros
+                const ingredientIds = Array.from(selectedIngredientes.keys());
+                const params = new URLSearchParams();
+                ingredientIds.forEach(id => params.append('ingredienteId', id));
+                
+                const res = await fetch(`/api/recetas?${params.toString()}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (res.ok) {
+                    alert('¡Receta creada exitosamente!');
+                    recetaForm.reset();
+                    selectedIngredientes.clear();
+                    updateIngredientesTags();
+                    const modal = bootstrap.Modal.getInstance(recetaModal);
+                    modal.hide();
+                    // Refrescar lista de recetas del usuario
+                    loadMisRecetas();
+                } else {
+                    const error = await res.text();
+                    alert('Error al crear la receta: ' + error);
+                }
+            } catch (err) {
+                console.error('Error:', err);
+                alert('Error al crear la receta. Por favor intenta de nuevo.');
+            }
+        });
+
+        // Listar recetas del usuario en Publicaciones
+        const misRecetasList = document.getElementById('mis-recetas-list');
+        const misRecetasEmpty = document.getElementById('mis-recetas-empty');
+
+        async function loadMisRecetas() {
+            misRecetasList.innerHTML = '';
+            misRecetasEmpty.style.display = 'none';
+            try {
+                const meRes = await fetch('/api/usuarios/me');
+                if (!meRes.ok) { throw new Error('No autenticado'); }
+                const me = await meRes.json();
+                const userId = me.id;
+
+                const recRes = await fetch('/api/recetas');
+                if (!recRes.ok) { throw new Error('Error al cargar recetas'); }
+                const recetas = await recRes.json();
+                const mias = recetas.filter(r => r.usuarioId === userId);
+
+                if (mias.length === 0) {
+                    misRecetasEmpty.style.display = 'block';
+                    return;
+                }
+
+                mias.forEach(r => {
+                    const item = document.createElement('div');
+                    item.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+                    const name = document.createElement('span');
+                    name.textContent = r.nombre || '';
+
+                    const actions = document.createElement('div');
+                    actions.className = 'btn-group';
+
+                    const verBtn = document.createElement('a');
+                    verBtn.className = 'btn btn-sm btn-outline-primary';
+                    verBtn.href = `/vista/${r.id}`;
+                    verBtn.textContent = 'Ver';
+
+                    const delBtn = document.createElement('button');
+                    delBtn.className = 'btn btn-sm btn-outline-danger';
+                    delBtn.textContent = 'Eliminar';
+                    delBtn.addEventListener('click', async () => {
+                        if (!confirm('¿Eliminar esta receta?')) return;
+                        try {
+                            const res = await fetch(`/api/recetas/${r.id}`, { method: 'DELETE' });
+                            if (res.ok) {
+                                loadMisRecetas();
+                            } else {
+                                alert('No se pudo eliminar la receta');
+                            }
+                        } catch (err) {
+                            console.error(err);
+                            alert('Error al eliminar la receta');
+                        }
+                    });
+
+                    actions.appendChild(verBtn);
+                    actions.appendChild(delBtn);
+                    item.appendChild(name);
+                    item.appendChild(actions);
+                    misRecetasList.appendChild(item);
+                });
+            } catch (err) {
+                console.error(err);
+                misRecetasEmpty.style.display = 'block';
+            }
+        }
+
+        // Cargar cuando se abra la pestaña de publicaciones
+        const publicacionesTabBtn = document.getElementById('Publicaciones-tab');
+        publicacionesTabBtn.addEventListener('shown.bs.tab', loadMisRecetas);
+        if (document.getElementById('publicaciones').classList.contains('show')) {
+            loadMisRecetas();
         }
     });
 </script>

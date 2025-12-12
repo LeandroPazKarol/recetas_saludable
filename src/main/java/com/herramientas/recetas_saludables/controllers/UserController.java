@@ -141,13 +141,11 @@ class UserRestController {
     
     // Obtener usuario actual autenticado
     @GetMapping("/me")
-    public ResponseEntity<User> getCurrentUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+    public ResponseEntity<User> getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return ResponseEntity.status(401).build();
         }
-        String correo = auth.getName();
-        User user = userService.obtenerPorCorreo(correo);
+        User user = userService.obtenerPorCorreo(userDetails.getUsername());
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
@@ -156,14 +154,12 @@ class UserRestController {
     
     // Agregar/Remover receta de favoritos (toggle)
     @PostMapping("/favoritos/{recipeId}")
-    public ResponseEntity<?> toggleFavorite(@PathVariable Long recipeId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+    public ResponseEntity<?> toggleFavorite(@PathVariable Long recipeId, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return ResponseEntity.status(401).body("No autenticado");
         }
         
-        String correo = auth.getName();
-        User user = userService.obtenerPorCorreo(correo);
+        User user = userService.obtenerPorCorreo(userDetails.getUsername());
         if (user == null) {
             return ResponseEntity.status(404).body("Usuario no encontrado");
         }
@@ -187,14 +183,12 @@ class UserRestController {
     
     // Obtener todos los favoritos del usuario
     @GetMapping("/favoritos")
-    public ResponseEntity<?> getFavorites() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+    public ResponseEntity<?> getFavorites(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return ResponseEntity.status(401).body("No autenticado");
         }
         
-        String correo = auth.getName();
-        User user = userService.obtenerPorCorreo(correo);
+        User user = userService.obtenerPorCorreo(userDetails.getUsername());
         if (user == null) {
             return ResponseEntity.status(404).body("Usuario no encontrado");
         }
@@ -204,14 +198,12 @@ class UserRestController {
     
     // Verificar si una receta es favorita
     @GetMapping("/favoritos/{recipeId}")
-    public ResponseEntity<?> isFavorite(@PathVariable Long recipeId) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth == null || !auth.isAuthenticated()) {
+    public ResponseEntity<?> isFavorite(@PathVariable Long recipeId, @AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
             return ResponseEntity.status(401).body("No autenticado");
         }
         
-        String correo = auth.getName();
-        User user = userService.obtenerPorCorreo(correo);
+        User user = userService.obtenerPorCorreo(userDetails.getUsername());
         if (user == null) {
             return ResponseEntity.status(404).body("Usuario no encontrado");
         }

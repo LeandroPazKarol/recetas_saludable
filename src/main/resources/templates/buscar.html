@@ -25,10 +25,10 @@
 			<div class="mb-3">
 				<label class="form-label">Precio máximo (soles)</label>
 				<div class="d-flex align-items-center gap-2">
-					<input id="price-slider" type="range" min="0" max="300" value="300" class="form-range">
-					<input id="price-input" type="number" min="0" max="300" value="300" class="form-control" style="width: 80px;">
+					<input id="price-slider" type="range" min="0" max="100" value="100" class="form-range">
+					<input id="price-input" type="number" min="0" max="100" value="100" class="form-control" style="width: 80px;">
 				</div>
-				<small class="text-muted">Rango: S/ 0 - S/ 300</small>
+				<small class="text-muted">Rango: S/ 0 - S/ 100</small>
 			</div>				<div class="d-flex justify-content-end">
 					<button type="submit" class="btn btn-success me-2">Buscar</button>
 					<button type="button" id="clear-btn" class="btn btn-outline-secondary">Limpiar</button>
@@ -77,7 +77,7 @@
 		priceInput.addEventListener('input', () => {
 			let val = parseInt(priceInput.value) || 0;
 			if (val < 0) val = 0;
-			if (val > 300) val = 300;
+			if (val > 100) val = 100;
 			priceInput.value = val;
 			priceSlider.value = val;
 		});
@@ -114,7 +114,7 @@
 			if (e) e.preventDefault();
 
 			const nombre = nameInput.value.trim();
-			const maxPrecio = parseInt(priceInput.value) || 300;
+			const maxPrecio = parseInt(priceInput.value) || 100;
 			const ingredientes = getSelectedIngredientIds();
 
 			const params = new URLSearchParams();
@@ -189,11 +189,16 @@
 			recipes.forEach(r => {
 				const col = document.createElement('div'); col.className = 'col';
 				const card = document.createElement('div'); card.className = 'card h-100 position-relative';
-				
-				// Imagen
-				const img = document.createElement('img'); img.className = 'card-img-top'; img.style.height = '180px'; img.style.objectFit = 'cover'; img.src = r.imagenUrl || '/assets/recetas/default.jpg'; img.alt = r.nombre || '';
-				
-				// Botón de favorito (corazón)
+				card.style.cursor = 'pointer';
+				card.addEventListener('click', () => viewRecipe(r.id));
+                
+				const img = document.createElement('img');
+				img.className = 'card-img-top';
+				img.style.height = '180px';
+				img.style.objectFit = 'cover';
+				img.src = r.imagenUrl || '/assets/recetas/default.jpg';
+				img.alt = r.nombre || '';
+                
 				const favBtn = document.createElement('button');
 				favBtn.className = 'btn btn-sm position-absolute top-0 end-0 m-2';
 				favBtn.style.background = 'rgba(255,255,255,0.9)';
@@ -207,20 +212,22 @@
 				favBtn.appendChild(favIcon);
 				favBtn.addEventListener('click', (e) => {
 					e.preventDefault();
+					e.stopPropagation();
 					toggleFavorite(r.id, favBtn, favIcon);
 				});
-				
-				// Body
+                
 				const bd = document.createElement('div'); bd.className = 'card-body';
 				const h5 = document.createElement('h5'); h5.className = 'card-title'; h5.textContent = r.nombre || '';
 				const p = document.createElement('p'); p.className = 'card-text'; p.textContent = r.descripcion || '';
 				bd.appendChild(h5); bd.appendChild(p);
-				
-				// Footer
-				const ff = document.createElement('div'); ff.className = 'card-footer bg-white border-0';
-				const btn = document.createElement('button'); btn.className = 'btn btn-sm btn-success w-100'; btn.textContent = 'Ver Receta'; btn.addEventListener('click', () => viewRecipe(r.id));
-				ff.appendChild(btn);
-				
+                
+				const ff = document.createElement('div');
+				ff.className = 'card-footer bg-white border-0 d-flex justify-content-end';
+				const priceTag = document.createElement('div');
+				priceTag.className = 'badge text-bg-success fs-6';
+				priceTag.textContent = `S/ ${r.precio ?? '—'}`;
+				ff.appendChild(priceTag);
+                
 				card.appendChild(img);
 				card.appendChild(favBtn);
 				card.appendChild(bd);
@@ -234,6 +241,8 @@
 			nameInput.value = '';
 			priceSlider.value = 300;
 			priceInput.value = 300;
+			priceSlider.value = 100;
+			priceInput.value = 100;
 			document.querySelectorAll('.ingredient-check').forEach(cb => cb.checked = false);
 			loadAllRecipes(); // Recargar todas las recetas
 		});
