@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<ht lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Recetas</title>
+    <title>Recetas - Recetas al Alcance</title>
 
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" />
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
 </head>
 
-  <b>
+<body>
     <!-- ================= HEADER ================= -->
   <header class="bg-success text-white">
     <nav class="navbar navbar-expand-lg navbar-dark container">
@@ -138,7 +138,7 @@
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
       <div class="col">
-        <div class="card h-100 shadow-sm">
+        <div class="card recipe-card h-100 shadow-sm">
           <div class="position-relative">
             <img th:src="@{/assets/recetas/tostada.jpg}" class="card-img-top" alt="Tostadas con palta"
               style="height: 250px; object-fit: cover" />
@@ -195,7 +195,7 @@
 
     <!-- Tostadas con Palta y Huevo -->
     <div class="col">
-      <div class="card h-100 shadow-sm">
+      <div class="card recipe-card h-100 shadow-sm">
         <div class="position-relative">
           <img th:src="@{/assets/recetas/tostada.jpg}" class="card-img-top" alt="Tostadas con palta"
                style="height: 250px; object-fit: cover" />
@@ -221,7 +221,7 @@
 
     <!-- Avena con Frutas -->
     <div class="col">
-      <div class="card h-100 shadow-sm">
+      <div class="card recipe-card h-100 shadow-sm">
         <div class="position-relative">
           <img th:src="@{/assets/recetas/avena.jpg}" class="card-img-top" alt="Avena con frutas"
                style="height: 250px; object-fit: cover" />
@@ -247,7 +247,7 @@
 
     <!-- Wraps Saludables -->
     <div class="col">
-      <div class="card h-100 shadow-sm">
+      <div class="card recipe-card h-100 shadow-sm">
         <div class="position-relative">
           <img th:src="@{/assets/recetas/wraps.webp}" class="card-img-top" alt="Wraps saludables"
                style="height: 250px; object-fit: cover" />
@@ -354,9 +354,11 @@
 
                 <div class="col-md-4 mb-4">
                     <h5 class="fw-bold">Síguenos</h5>
-                    <a href="#" class="text-white fs-4 me-3"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="text-white fs-4 me-3"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="text-white fs-4"><i class="bi bi-twitter"></i></a>
+                    <div class="social-links">
+                        <a href="#" class="text-white" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white" title="Twitter"><i class="bi bi-twitter"></i></a>
+                    </div>
                 </div>
             </div>
 
