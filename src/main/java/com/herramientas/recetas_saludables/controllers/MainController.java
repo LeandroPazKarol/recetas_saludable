@@ -42,4 +42,9 @@ public class MainController {
         return "ideas";
     }
 
+    @GetMapping({ "/vista/{id}" })
+    public String verReceta(Model model) {
+        return "vista";
+    }
+
 }

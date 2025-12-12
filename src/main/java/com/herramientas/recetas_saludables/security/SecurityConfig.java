@@ -40,11 +40,17 @@ public class SecurityConfig {
                                 "/usuario/perfil",
                                 "/buscar",
                                 "/recetas",
+                                "/vista/**",
                                 "/usuario/guardarUsuario",
+                                "/api/ingredientes/**",
+                                "/api/recetas/buscar",
+                                "/api/recetas/**",
                                 "/assets/**",
                                 "/css/**",
                                 "/js/**")
                         .permitAll()
+                        .requestMatchers("/api/usuarios/favoritos/**")
+                        .authenticated()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
                         .loginPage("/login")

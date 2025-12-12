@@ -65,7 +65,7 @@
 	<h1 class="mb-3">Buscar Recetas</h1>
 
 	<div class="row">
-		<div class="col-lg-8">
+		<div class="col-lg-9">
 			<form id="search-form" class="card p-3 mb-4">
 				<div class="mb-3">
 					<label for="search-name" class="form-label">Nombre de la receta</label>
@@ -92,7 +92,7 @@
 			</section>
 		</div>
 
-		<div class="col-lg-4">
+		<div class="col-lg-3">
 			<div class="card p-3 mb-4">
 				<h5>Filtrar por ingredientes</h5>
 				<div id="ingredients-list" style="max-height:60vh; overflow:auto"></div>
@@ -198,8 +198,6 @@
 
 		async function doSearch(e) {
 			if (e) e.preventDefault();
-			resultsEl.innerHTML = '';
-			noResults.style.display = 'none';
 
 			const nombre = nameInput.value.trim();
 			const maxPrecio = parseInt(priceInput.value) || 300;
@@ -214,24 +212,7 @@
 				const res = await fetch(`${API_RECIPES}/buscar?${params.toString()}`);
 				if (!res.ok) throw new Error('Error en búsqueda');
 				const recipes = await res.json();
-				if (!recipes || recipes.length === 0) {
-					noResults.style.display = 'block';
-					return;
-				}
-
-				recipes.forEach(r => {
-					const col = document.createElement('div'); col.className = 'col';
-					const card = document.createElement('div'); card.className = 'card h-100';
-					const img = document.createElement('img'); img.className = 'card-img-top'; img.style.height = '180px'; img.style.objectFit = 'cover'; img.src = r.imagenUrl || '/assets/recetas/default.jpg'; img.alt = r.nombre || '';
-					const bd = document.createElement('div'); bd.className = 'card-body';
-					const h5 = document.createElement('h5'); h5.className = 'card-title'; h5.textContent = r.nombre || '';
-					const p = document.createElement('p'); p.className = 'card-text'; p.textContent = r.descripcion || '';
-					bd.appendChild(h5); bd.appendChild(p);
-					const ff = document.createElement('div'); ff.className = 'card-footer bg-white border-0';
-					const btn = document.createElement('button'); btn.className = 'btn btn-sm btn-success w-100'; btn.textContent = 'Ver Receta'; btn.addEventListener('click', () => showDetail(r.id));
-					ff.appendChild(btn);
-					card.appendChild(img); card.appendChild(bd); card.appendChild(ff); col.appendChild(card); resultsEl.appendChild(col);
-				});
+				displayRecipes(recipes);
 			} catch (err) {
 				console.error(err);
 				noResults.style.display = 'block';
@@ -239,10 +220,100 @@
 			}
 		}
 
-		function showDetail(id) {
-			fetch(`${API_RECIPES}/${id}`).then(r => r.json()).then(data => {
-				alert((data.nombre || 'Receta') + '\n\n' + (data.instrucciones || 'Sin instrucciones'));
-			}).catch(err => console.error(err));
+		function viewRecipe(id) {
+			window.location.href = `/vista/${id}`;
+		}
+
+		async function toggleFavorite(recipeId, btn, icon) {
+			try {
+				const res = await fetch(`/api/usuarios/favoritos/${recipeId}`, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' }
+				});
+				if (res.ok) {
+					const isFavorite = await res.json();
+					if (isFavorite.favorito) {
+						icon.className = 'bi bi-heart-fill';
+						btn.style.background = 'rgba(220, 53, 69, 0.2)';
+					} else {
+						icon.className = 'bi bi-heart';
+						btn.style.background = 'rgba(255,255,255,0.9)';
+					}
+				} else {
+					alert('No estás autenticado. Por favor, inicia sesión.');
+				}
+			} catch (err) {
+				console.error('Error toggling favorite:', err);
+				alert('Error al guardar favorito');
+			}
+		}
+
+		// Cargar todas las recetas al inicio
+		async function loadAllRecipes() {
+			try {
+				const res = await fetch(API_RECIPES);
+				if (!res.ok) throw new Error('Error al cargar recetas');
+				const recipes = await res.json();
+				displayRecipes(recipes);
+			} catch (err) {
+				console.error(err);
+				noResults.style.display = 'block';
+				noResults.textContent = 'Error al cargar las recetas.';
+			}
+		}
+
+		// Función para mostrar recetas (reutilizable)
+		function displayRecipes(recipes) {
+			resultsEl.innerHTML = '';
+			noResults.style.display = 'none';
+
+			if (!recipes || recipes.length === 0) {
+				noResults.style.display = 'block';
+				return;
+			}
+
+			recipes.forEach(r => {
+				const col = document.createElement('div'); col.className = 'col';
+				const card = document.createElement('div'); card.className = 'card h-100 position-relative';
+				
+				// Imagen
+				const img = document.createElement('img'); img.className = 'card-img-top'; img.style.height = '180px'; img.style.objectFit = 'cover'; img.src = r.imagenUrl || '/assets/recetas/default.jpg'; img.alt = r.nombre || '';
+				
+				// Botón de favorito (corazón)
+				const favBtn = document.createElement('button');
+				favBtn.className = 'btn btn-sm position-absolute top-0 end-0 m-2';
+				favBtn.style.background = 'rgba(255,255,255,0.9)';
+				favBtn.style.border = 'none';
+				favBtn.style.cursor = 'pointer';
+				favBtn.dataset.recipeId = r.id;
+				const favIcon = document.createElement('i');
+				favIcon.className = 'bi bi-heart';
+				favIcon.style.fontSize = '1.2rem';
+				favIcon.style.color = '#dc3545';
+				favBtn.appendChild(favIcon);
+				favBtn.addEventListener('click', (e) => {
+					e.preventDefault();
+					toggleFavorite(r.id, favBtn, favIcon);
+				});
+				
+				// Body
+				const bd = document.createElement('div'); bd.className = 'card-body';
+				const h5 = document.createElement('h5'); h5.className = 'card-title'; h5.textContent = r.nombre || '';
+				const p = document.createElement('p'); p.className = 'card-text'; p.textContent = r.descripcion || '';
+				bd.appendChild(h5); bd.appendChild(p);
+				
+				// Footer
+				const ff = document.createElement('div'); ff.className = 'card-footer bg-white border-0';
+				const btn = document.createElement('button'); btn.className = 'btn btn-sm btn-success w-100'; btn.textContent = 'Ver Receta'; btn.addEventListener('click', () => viewRecipe(r.id));
+				ff.appendChild(btn);
+				
+				card.appendChild(img);
+				card.appendChild(favBtn);
+				card.appendChild(bd);
+				card.appendChild(ff);
+				col.appendChild(card);
+				resultsEl.appendChild(col);
+			});
 		}
 
 		clearBtn.addEventListener('click', () => {
@@ -250,12 +321,12 @@
 			priceSlider.value = 300;
 			priceInput.value = 300;
 			document.querySelectorAll('.ingredient-check').forEach(cb => cb.checked = false);
-			resultsEl.innerHTML = '';
-			noResults.style.display = 'none';
+			loadAllRecipes(); // Recargar todas las recetas
 		});
 
 		form.addEventListener('submit', doSearch);
 		loadIngredients();
+		loadAllRecipes(); // Cargar todas las recetas al inicio
 	});
 </script>
 
